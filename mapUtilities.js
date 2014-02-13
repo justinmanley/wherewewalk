@@ -995,7 +995,7 @@ var mapcalc = function(map, doc)
 	var getDeleteUrl = function() 
 // ---------------------------------------------------------------
 	{
-		var deleteUrl = 'http://i.imgur.com/RUrKV.png';
+		var deleteUrl = '../resources/closebox.png';
 		if (!validDeleteUrl) {
 			var request = new XMLHttpRequest();
 			request.open('GET', deleteUrl, false);
