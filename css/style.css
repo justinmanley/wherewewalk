@@ -90,9 +90,14 @@ body {
   height: 20px;
   width: 400px;
   text-align: center;
+  font-family: 'Andada', serif;
   color: #000000;
+<<<<<<< HEAD
   font-family: 'Andada', serif;
   font-size: 11pt;
+=======
+  font-size: 12pt;
+>>>>>>> master
 }
 #test {
   height: 100%;
@@ -145,7 +150,7 @@ body {
   background-color: #ff4e4e;
 }
 html.thankyou {
-  background: url('../../images/portal.jpg') no-repeat center center fixed;
+  background: url('../../images/portal2.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
