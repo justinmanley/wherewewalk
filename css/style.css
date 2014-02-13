@@ -9,6 +9,10 @@ body {
 #map-canvas {
   height: 100%;
 }
+@font-face {
+  font-family: 'Andada';
+  src: url(../resources/andada/Andada-Regular.woff);
+}
 #next-page-button,
 #previous-page-button,
 #next-instruction,
@@ -87,7 +91,8 @@ body {
   width: 400px;
   text-align: center;
   color: #000000;
-  font-size: 10pt;
+  font-family: 'Andada', serif;
+  font-size: 11pt;
 }
 #test {
   height: 100%;
