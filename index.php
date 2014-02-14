@@ -1,5 +1,9 @@
 <?php 
 
-header('Location: /tutorial');
+header('Location: /pages/tutorial');
+
+function load_template() {
+	
+}
 
 ?>

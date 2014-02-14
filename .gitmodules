@@ -1,9 +1,3 @@
-[submodule "colors"]
-	path = colors
-	url = https://github.com/manleyjster/RainbowVis-JS.git
-[submodule "dowsingjs"]
-	path = dowsingjs
-	url = ./dowsingjs
 [submodule "dowsing-js"]
 	path = dowsing-js
 	url = https://github.com/manleyjster/dowsing-js
