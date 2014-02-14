@@ -22,7 +22,7 @@ function initialize() {
 
 		setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)) }, 1000);
 
-		surveyHelper.showNextButton(data, 'save.php', 'add_time', function() {
+		surveyHelper.showNextButton(data, 'end', 'add_time', function() {
 			return true;
 		}, function() {
 			//

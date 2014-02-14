@@ -1,6 +1,5 @@
 <?php 
 
-// header('Location: /tutorial');
-echo $_SERVER['eduPersonTargetedID'];
+header('Location: /pages/tutorial');
 
 ?>
