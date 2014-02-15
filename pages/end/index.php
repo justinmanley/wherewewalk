@@ -7,6 +7,13 @@
 	</script>
 	</head>
 	<body>
-	<?php require_once('../../dowsing-js/save.php'); ?>
+	<?php 
+		function successful_database_save() {
+			echo '<div id="thankyou">Thank you for your input.<br />Your response will help us improve campus.</div>\n';		
+			return;
+		}
+
+		require_once('../../dowsing-js/save.php'); 
+	?>
 	</body>
 </html><!-- .thankyou -->
