@@ -328,7 +328,7 @@ var spatialsurvey = function(map, doc) {
 // ---------------------------------------------------------------
 	{
 		return {
-			url: getResourceUrl('marker.png'),
+			url: getImageUrl('marker.png'),
 			anchor: new google.maps.Point(10,10)
 		};
 	}
@@ -460,7 +460,7 @@ var spatialsurvey = function(map, doc) {
 				height: '60px',
 				'border-radius': '7px'
 			},
-			closeBoxURL: getResourceUrl('close-icon.png'),
+			closeBoxURL: getImageUrl('close-icon.png'),
 			pixelOffset: new google.maps.Size(-34,-95),
 			map: map
 		});
@@ -479,7 +479,7 @@ var spatialsurvey = function(map, doc) {
 			pixelOffset: new google.maps.Size(-34,-55)
 		});		
 		timestamp.pyramid = new google.maps.Marker({
-			icon: { url: getResourceUrl('pyramid.png'), anchor: new google.maps.Point(10,30) },
+			icon: { url: getImageUrl('pyramid.png'), anchor: new google.maps.Point(10,30) },
 			shape: { type: "rect", coords: [0,0,20,20] },
 			position: position,
 			draggable: true,
@@ -597,8 +597,7 @@ var spatialsurvey = function(map, doc) {
 			progressText.id = 'progress-text';
 
 			var widthFormat = /^([0-9]*)px$/;
-			// var progressBarWidth = parseInt(widthFormat.exec(getCSSRule('#progress-bar').style.width)[1]);
-			var progressBarWidth = 400;
+			var progressBarWidth = parseInt(widthFormat.exec(getCSSRule('#progress-bar').style.width)[1]);
 
 			progressIndicator.style.width = (currentScreen/max)*progressBarWidth + 'px';
 
@@ -613,7 +612,7 @@ var spatialsurvey = function(map, doc) {
 			var extra = doc.getElementById('extra');
 			extra.innerHTML = '<div id="instructions-main">'+
 				'<div class="close-box">'+
-					'<img src="' + getResourceUrl('close-icon.png') + '"/>'+
+					'<img src="' + getImageUrl('close-icon.png') + '"/>'+
 				'</div>'+				
 				'<div id="instructions-main-content">'+
 				'</div><!-- #instructions-main-content -->'+
@@ -893,7 +892,7 @@ var spatialsurvey = function(map, doc) {
 					pixelOffset: new google.maps.Size(- width/2, -120)
 				});
 				var pyramid = new google.maps.Marker({
-					icon: { url: getResourceUrl('pyramid.png'), anchor: new google.maps.Point(10,50) },
+					icon: { url: getImageUrl('pyramid.png'), anchor: new google.maps.Point(10,50) },
 					shape: { type: "rect", coords: [0,0,20,20] },
 					position: position,
 					draggable: true,
@@ -968,7 +967,7 @@ var mapcalc = function(map, doc)
 	var getDeleteUrl = function() 
 // ---------------------------------------------------------------
 	{
-		var deleteUrl = getResourceUrl('closebox.png');
+		var deleteUrl = 'http://i.imgur.com/RUrKV.png';
 		if (!validDeleteUrl) {
 			var request = new XMLHttpRequest();
 			request.open('GET', deleteUrl, false);
@@ -1039,7 +1038,7 @@ var mapcalc = function(map, doc)
 		var deleteButton = addDeleteButton(doc, polyline);
 		var rightClickDiv = new InfoBox({
 			content: deleteButton,
-			closeBoxURL: getResourceUrl('close-icon.png'),
+			closeBoxURL: getImageUrl('close-icon.png'),
 			visible: false,
 		});
 
@@ -1568,6 +1567,6 @@ function getCSSRule(ruleName, deleteFlag) {               // Return requested st
    return false;                                          // we found NOTHING!
 }                                                         // end getCSSRule 
 
-function getResourceUrl(filename) {
-	return '../../dowsing-js/resources/' + filename;
+function getImageUrl(filename) {
+	return '../../images/' + filename;
 }
