@@ -1,0 +1,25 @@
+.webpage-excerpt {
+  height: 300px;
+  margin: 0 auto;
+  box-shadow: 0 0 15px #9a9a9a;
+}
+.thankyou body {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+#thankyou {
+  padding: 50px;
+  font-size: 30px;
+  width: 70%;
+}
+#thankyou p {
+  margin: 0;
+}
+#thankyou p.bright-background {
+  color: #ffffff;
+}
+#thankyou p a {
+  color: #4387fd;
+}
+#thankyou img {
+  margin: 35px 0;
+}
