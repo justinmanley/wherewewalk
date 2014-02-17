@@ -10,7 +10,8 @@ function initialize() {
 		drawingControl: false,
 		polylineOptions: {
 			editable: true,
-			strokeColor: '#ffff4d'
+			strokeColor: '#4387fd',
+			strokeWeight: 4
 		}
 	});
 	var surveyHelper = spatialsurvey(map, document, drawingManager);
