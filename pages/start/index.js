@@ -46,7 +46,7 @@ function initialize() {
 		});
 	});
 
-	surveyHelper.instructions.showProgress(2,4, 'Draw your path.');
+	surveyHelper.showProgress(2,4, 'Draw your path.');
 
 	var data = surveyHelper.personPath();
 
@@ -83,9 +83,12 @@ function initialize() {
 								'</p>'+
 								'<p>When you\'re done, click the button at the bottom of the page to advance to the next step.</p>';
 
-	surveyHelper.instructions.init(drawingManager, { 
-		content: instructionsPrimary, 
-		sidebar: instructionsSidebar 
+	var sidebar = surveyHelper.sidebar.create({ content: instructionsSidebar });
+
+	surveyHelper.instructions.create(drawingManager, { 
+		content: instructionsPrimary,
+		action: function() { sidebar.show(); },
+		hideAction: function() { sidebar.hide(); }
 	});
 
 	var campus = [

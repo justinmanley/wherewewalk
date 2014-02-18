@@ -10,13 +10,14 @@ function initialize() {
 		drawingControl: false,
 		polylineOptions: {
 			editable: true,
-			strokeColor: '#4387fd'
+			strokeColor: '#4387fd',
+			strokeWeight: 4
 		}
 	});
 	var surveyHelper = spatialsurvey(map, document, drawingManager);
 	var mapHelper = mapcalc(map, document);
 
-	surveyHelper.instructions.init(drawingManager, {
+	surveyHelper.instructions.create(drawingManager, {
 		content: [{
 			content:  '<h2>Where Do You Walk?</h2>'+
 						'<hr />'+
@@ -27,17 +28,18 @@ function initialize() {
 			buttonText: 'NEXT'
 		},
 		{
-			content:  '<h2>Where Do You Walk?</h2>'+
+			content:  '<h2>Tutorial</h2>'+
 						'<hr />'+
 						'<p>This survey will ask you to describe the path that you took around campus yesterday by tracing it on the map.</p>'+
 						'<hr />'+
-						'<p>First we\'ll lead you through a quick tutorial of the survey tool, then we\'ll ask you to draw the path you took yesterday.  There are three screens in all, and the survey takes about four minutes to complete.</p>'
+						'<p>First we\'ll lead you through a quick tutorial of the survey tool, then we\'ll ask you to draw the path you took yesterday.  There are three screens in all, and the survey takes about eight minutes to complete.</p>'
 			,
 			buttonText: 'NEXT'
 		}],
-	}, function() { surveyHelper.tutorial.create(drawingManager) });
+		action: function() { surveyHelper.tutorial.create(drawingManager); }
+	});
 
-	surveyHelper.instructions.showProgress(1, 4, 'Tutorial');
+	surveyHelper.showProgress(1, 4, 'Tutorial');
 
 
 }

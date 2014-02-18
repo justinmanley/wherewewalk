@@ -28,7 +28,7 @@ function initialize() {
 			//
 		});
 
-		surveyHelper.instructions.showProgress(3,4, 'Add times.');
+		surveyHelper.showProgress(3,4, 'Add times.');
 
 		instructionsPrimary = [
 			{ 
@@ -40,7 +40,7 @@ function initialize() {
 			}		
 		]
 
-		surveyHelper.instructions.init(drawingManager, { 
+		surveyHelper.instructions.create(drawingManager, { 
 			content: instructionsPrimary
 		});		
 
