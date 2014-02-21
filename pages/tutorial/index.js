@@ -36,7 +36,9 @@ function initialize() {
 			,
 			buttonText: 'NEXT'
 		}],
-		action: function() { surveyHelper.tutorial.create(drawingManager); }
+		action: function() { 
+			surveyHelper.tutorial.create(drawingManager, surveyHelper.tutorial.standardLessons); 
+		}
 	});
 
 	surveyHelper.showProgress(1, 4, 'Tutorial');
