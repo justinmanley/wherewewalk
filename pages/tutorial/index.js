@@ -8,7 +8,7 @@ function initialize() {
 		zoomControlOptions: {
 			style: 'SMALL'
 		},
-		mapTypeId: google.maps.MapTypeId.SATELLITE
+		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
 	var drawingManager = new google.maps.drawing.DrawingManager({
 		drawingMode: google.maps.drawing.OverlayType.POLYLINE,

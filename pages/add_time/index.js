@@ -8,7 +8,7 @@ function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: new google.maps.LatLng(41.790113, -87.600732),
 		zoom: 18,
-		mapTypeId: google.maps.MapTypeId.SATELLITE
+		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
 	var drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl: false
