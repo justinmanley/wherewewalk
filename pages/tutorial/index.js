@@ -37,7 +37,7 @@ function initialize() {
 			buttonText: 'NEXT'
 		}],
 		action: function() { 
-			surveyHelper.tutorial.create(drawingManager, surveyHelper.tutorial.standardLessons); 
+			surveyHelper.tutorial.create(drawingManager, surveyHelper.tutorial.standardCurriculum); 
 		}
 	});
 
