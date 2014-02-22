@@ -3,6 +3,11 @@ function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: mapCenter,
 		zoom: 18,
+		maxZoom: 20,
+		minZoom: 18,
+		zoomControlOptions: {
+			style: 'SMALL'
+		},
 		mapTypeId: google.maps.MapTypeId.SATELLITE
 	});
 	var drawingManager = new google.maps.drawing.DrawingManager({
