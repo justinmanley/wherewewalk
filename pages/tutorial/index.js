@@ -3,7 +3,12 @@ function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: mapCenter,
 		zoom: 18,
-		mapTypeId: google.maps.MapTypeId.SATELLITE
+		maxZoom: 20,
+		minZoom: 18,
+		zoomControlOptions: {
+			style: 'SMALL'
+		},
+		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
 	var drawingManager = new google.maps.drawing.DrawingManager({
 		drawingMode: google.maps.drawing.OverlayType.POLYLINE,
