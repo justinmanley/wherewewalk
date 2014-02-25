@@ -3,7 +3,10 @@ function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: mapCenter,
 		zoom: 19,
-		mapTypeId: google.maps.MapTypeId.SATELLITE
+		maxZoom: 20,
+		minZoom: 18,
+		zoomControl: { style: 'SMALL' },
+		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
 	var drawingManager = new google.maps.drawing.DrawingManager({
 		drawingMode: google.maps.drawing.OverlayType.POLYLINE,
@@ -36,11 +39,14 @@ function initialize() {
 				return false; 
 			}
 		}, function() {
-			var instructionsSidebar = document.getElementById('instructions-content');
+			var instructionsContent = document.getElementById('instructions-content');
 			var errorMessage = document.createElement('p');
 			errorMessage.id = 'error-message';
 			errorMessage.innerHTML = 'Please enter your start and end time.';
-			instructionsSidebar.appendChild(errorMessage);	
+			instructionsContent.appendChild(errorMessage);
+
+			var sidebar = document.getElementById('instructions-sidebar');
+			sidebar.style.height = '390px';
 
 			setTimeout(function() { errorMessage.style.backgroundColor = oldColor; }, 1500);
 		});
@@ -193,7 +199,7 @@ function initialize() {
 
 	var shading = new google.maps.Polygon({
 		paths: [ illinois, campus ],
-		fillOpacity: 0.65
+		fillOpacity: 0.5
 	});
 	shading.setMap(map);	
 
