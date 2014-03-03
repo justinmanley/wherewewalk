@@ -46,7 +46,9 @@ function initialize() {
 			instructionsContent.appendChild(errorMessage);
 
 			var sidebar = document.getElementById('instructions-sidebar');
-			sidebar.style.height = '390px';
+			sidebar.style.height = (sidebar.offsetHeight + 30) + 'px';
+			map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear();
+			map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(sidebar);
 
 			setTimeout(function() { errorMessage.style.backgroundColor = oldColor; }, 1500);
 		});
@@ -78,22 +80,43 @@ function initialize() {
 									'<div id="start-end-time-question">'+
 										'<label for="start-time">Start Time</label>'+
 										'<br />'+
-										'<input name="start-time" id="sidebar-start-time"/>'+
+										'<input name="start-time" id="sidebar-start-time" value="X:XXam"/>'+
 									'</div>'+
 									'<div id="start-end-time-question">'+
 										'<label for="end-time">End Time</label>'+
 										'<br />'+
-										'<input name="end-time" id="sidebar-end-time"/>'+
+										'<input name="end-time" id="sidebar-end-time" value="X:XXpm"/>'+
 									'</div>'+
 								'</form>'+
 								'</p>'+
 								'<p>When you\'re done, click the button at the bottom of the page to advance to the next step.</p>';
 
-	var sidebar = surveyHelper.sidebar.create({ content: instructionsSidebar });
+	var helpContent = '<p>You can click reset to clear your path and start over, or go back to the tutorial.</p>'+
+							'<div class="sidebar-button">'+
+								'<a href="."><button id="reset-button" class="dowsing-button">RESET</button></a>'+
+							'</div><!-- .sidebar-button -->'+
+							'<div class="sidebar-button">'+
+								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
+							'</div><!-- .sidebar-button -->';
+
+	var sidebar = surveyHelper.sidebar.create({ 
+		content: instructionsSidebar, 
+		height: 395,
+		sidebarId: 'instructions-sidebar',
+		help: {
+			teaser: 'Stuck?  Need help?',
+			teaserId: 'help-teaser',
+			content: helpContent,
+			contentId: 'help-content'
+		}
+	});
 
 	surveyHelper.instructions.create(drawingManager, { 
 		content: instructionsPrimary,
-		action: function() { sidebar.show(); },
+		action: function() { 
+			sidebar.show(); 
+			sidebar.toggleHelp();
+		},
 		hideAction: function() { sidebar.hide(); }
 	});
 

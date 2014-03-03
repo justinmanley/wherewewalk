@@ -22,6 +22,20 @@ function initialize() {
 	var surveyHelper = spatialsurvey(map, document, drawingManager);
 	var mapHelper = mapcalc(map, document);
 
+	var sidebarContent = '<div id="instructions-content">'+
+							'<h2>Instructions</h2>'+
+							'<p>Follow the steps of the tutorial.</p>'+
+							'<div class="sidebar-button">'+
+								'<a href="../start"><button id="reset-button" class="dowsing-button dowsing-button-grey">SKIP TUTORIAL</button></a>'+
+							'</div><!-- .sidebar-button -->'+							
+						'</div><!-- #instructions-content -->';
+
+	var sidebar = surveyHelper.sidebar.create({ 
+		content: sidebarContent, 
+		height: 395,
+		sidebarId: 'instructions-sidebar'
+	});
+
 	surveyHelper.instructions.create(drawingManager, {
 		content: [{
 			content:  '<h2>Where Do You Walk?</h2>'+
@@ -43,7 +57,9 @@ function initialize() {
 		}],
 		action: function() { 
 			surveyHelper.tutorial.create(drawingManager, surveyHelper.tutorial.standardCurriculum); 
-		}
+			sidebar.show();
+		},
+		hideAction: function() { sidebar.hide(); }
 	});
 
 	surveyHelper.showProgress(1, 4, 'Tutorial');
