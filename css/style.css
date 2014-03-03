@@ -1,0 +1,21 @@
+#github-link {
+  position: absolute;
+  bottom: 15px;
+  font-family: 'Andada' serif;
+  font-size: 18px;
+  text-align: center;
+  left: 10%;
+  right: 10%;
+  color: #ffffff;
+}
+#help-teaser {
+  color: #ff0000;
+  cursor: pointer;
+}
+#help-teaser::selection {
+  background-color: rgba(0, 0, 0, 0);
+}
+#help-content {
+  display: none;
+  margin-bottom: 13.7px;
+}
