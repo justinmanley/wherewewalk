@@ -17,8 +17,28 @@ function initialize() {
 	// all user data is stored in this object
 	var surveyHelper = spatialsurvey(map, document);
 	var mapHelper = mapcalc(map, document);
-	var data = surveyHelper.personPath();
-	data.display(function() {
+	var data = surveyHelper.pathData();
+	data.load(function() {}, onLoadPathData);
+
+	function onLoadPathData() {
+		var polyline = data.getPolyline();
+		polyline.setMap(map);
+
+		surveyHelper.timestamp({
+			polyline: polyline,
+			position: polyline.getPath().getAt(0),
+			startTime: data.getStartTime(),
+			type: 'single',
+			openOnCreate: false
+		}).create();
+
+		surveyHelper.timestamp({
+			polyline: polyline,
+			position: polyline.getPath().getArray().last(),
+			startTime: data.getEndTime(),
+			type: 'single',
+			openOnCreate: false
+		}).create();					
 
 		setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)) }, 1000);
 
@@ -36,13 +56,19 @@ function initialize() {
 
 		instructionsSidebar = '<div id="instructions-content">'+
 								'<h2>Instructions</h2>'+
-								'<p>Trace the path that you drew on the map.'+
+								'<p>Retrace the path that you drew on the map.'+
 									'Whenever you come to a stopping point (a place where you spent half an hour or longer),'+
 									' click on your path and record when you arrived and when you left.'+
-								'</p>'
+								'</p>'+								
 							'</div><!-- #instructions-sidebar -->';
 
-		var helpContent = '<p>You can click reset to clear your path and start over, or go back to the tutorial.</p>'+
+		var helpContent = '<p>'+
+								'Did you make a mistake?  You can go back to the previous screen to edit your path if you need to:'+
+							'</p>'+								
+							'<div class="sidebar-button">'+
+								'<a href="../start/"><button id="edit-path" class="dowsing-button">EDIT PATH</button></a>'+
+							'</div><!-- .sidebar-button -->'+
+							'<p>You can also go back to the tutorial for a refresher.</p>'+
 							'<div class="sidebar-button">'+
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
 							'</div><!-- .sidebar-button -->'
@@ -81,8 +107,8 @@ function initialize() {
 					type: 'double'
 				}).create();
 			}			
-		});
-	});
+		});		
+	}
 
 }
 
