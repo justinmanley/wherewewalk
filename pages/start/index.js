@@ -20,43 +20,92 @@ function initialize() {
 	var surveyHelper = spatialsurvey(map, document, drawingManager);
 	var mapHelper = mapcalc(map, document);
 
-	google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
-		data.setPath(polyline.getPath().getArray());
-		drawingManager.setOptions({
-			drawingMode: null
-		});		
+	var data = surveyHelper.pathData();
+	data.load(onEmptyPath, onPathLoad);
+
+	function onPathLoad() {
+		var polyline = data.getPolyline();
+		polyline.setOptions({ editable: true });
+		polyline.setMap(map);
+
+		drawingManager.setOptions({ drawingMode: null });
 		mapHelper.rightClickButton(polyline);
 
-		surveyHelper.showNextButton(data, 'add_time', 'start', function() {
-			var startTime = document.getElementById('sidebar-start-time').value;
-			var endTime = document.getElementById('sidebar-end-time').value;	
-			if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
-				data.setStartTime(startTime);
-				data.setEndTime(endTime);
-				return true;
-			}
-			else { 
-				return false; 
-			}
-		}, function() {
-			var instructionsContent = document.getElementById('instructions-content');
-			var errorMessage = document.createElement('p');
-			errorMessage.id = 'error-message';
-			errorMessage.innerHTML = 'Please enter your start and end time.';
-			instructionsContent.appendChild(errorMessage);
+		surveyHelper.instructions.create(drawingManager, { 
+			content: instructionsPrimary,
+			action: function() { 
+				sidebar.show(); 
+				sidebar.toggleHelp();
 
-			var sidebar = document.getElementById('instructions-sidebar');
-			sidebar.style.height = (sidebar.offsetHeight + 30) + 'px';
-			map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear();
-			map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(sidebar);
+				document.getElementById('sidebar-start-time').value = data.getStartTime();
+				document.getElementById('sidebar-end-time').value = data.getEndTime();
 
-			setTimeout(function() { errorMessage.style.backgroundColor = oldColor; }, 1500);
+				surveyHelper.showNextButton(data, 'add_time', 'start', function() {	
+					var startTime = document.getElementById('sidebar-start-time').value;
+					var endTime = document.getElementById('sidebar-end-time').value;			
+					data.setPolylineCoordinates(polyline.getPath().getArray());
+					if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
+						data.setStartTime(startTime);
+						data.setEndTime(endTime);
+					}	
+					return true;
+				}, function() {  });				
+			},
+			hideAction: function() { sidebar.hide(); }
 		});
-	});
+	}
+
+	function onEmptyPath() {
+		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
+			data.setPolylineCoordinates(polyline.getPath().getArray());
+			drawingManager.setOptions({
+				drawingMode: null
+			});		
+			mapHelper.rightClickButton(polyline);			
+
+			surveyHelper.showNextButton(data, 'add_time', 'start', function() {
+				var startTime = document.getElementById('sidebar-start-time').value;
+				var endTime = document.getElementById('sidebar-end-time').value;	
+				if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
+					data.setStartTime(startTime);
+					data.setEndTime(endTime);
+					return true;
+				}
+				else { 
+					return false; 
+				}
+			}, function() {
+				var instructionsContent = document.getElementById('instructions-content');
+				var errorMessage = document.createElement('p');
+				errorMessage.id = 'error-message';
+				errorMessage.innerHTML = 'Please enter your start and end time.';
+				instructionsContent.appendChild(errorMessage);
+
+				var sidebar = document.getElementById('instructions-sidebar');
+				sidebar.style.height = (sidebar.offsetHeight + 30) + 'px';
+				map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear();
+				map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(sidebar);
+
+				setTimeout(function() { errorMessage.style.backgroundColor = oldColor; }, 1500);
+			});
+		});
+
+		surveyHelper.instructions.create(drawingManager, { 
+			content: instructionsPrimary,
+			action: function() { 
+				sidebar.show(); 
+				sidebar.toggleHelp();
+
+				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'focus', onFocusInputField);
+				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'blur', onBlurInputField);				
+				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'focus', onFocusInputField);
+				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'blur', onBlurInputField);				
+			},
+			hideAction: function() { sidebar.hide(); }
+		});
+	}	
 
 	surveyHelper.showProgress(2,4, 'Draw your path.');
-
-	var data = surveyHelper.personPath();
 
 	var instructionsPrimary = [
 		{ 
@@ -93,7 +142,7 @@ function initialize() {
 
 	var helpContent = '<p>You can click reset to clear your path and start over, or go back to the tutorial.</p>'+
 							'<div class="sidebar-button">'+
-								'<a href="."><button id="reset-button" class="dowsing-button">RESET</button></a>'+
+								'<a href="../../dowsing-js/reset.php"><button id="reset-button" class="dowsing-button">RESET</button></a>'+
 							'</div><!-- .sidebar-button -->'+
 							'<div class="sidebar-button">'+
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
@@ -109,16 +158,22 @@ function initialize() {
 			content: helpContent,
 			contentId: 'help-content'
 		}
-	});
+	});	
 
-	surveyHelper.instructions.create(drawingManager, { 
-		content: instructionsPrimary,
-		action: function() { 
-			sidebar.show(); 
-			sidebar.toggleHelp();
-		},
-		hideAction: function() { sidebar.hide(); }
-	});
+	function onFocusInputField(event) {
+		event.srcElement.value = '';
+		event.srcElement.style.color = '#000000';
+	}
+
+	function onBlurInputField(event) {
+		if ( event.srcElement.value === '' ) {
+			if ( event.srcElement.id == 'sidebar-start-time' )
+				event.srcElement.value = 'X:XXam';
+			else if ( event.srcElement.id == 'sidebar-end-time' )
+				event.srcElement.value = 'X:XXpm';
+			event.srcElement.style.color = '#696969';
+		}
+ 	}
 
 	var campus = [
 		new google.maps.LatLng(41.79646264332723, -87.60611236095428),
@@ -222,10 +277,10 @@ function initialize() {
 
 	var shading = new google.maps.Polygon({
 		paths: [ illinois, campus ],
-		fillOpacity: 0.5
+		fillOpacity: 0.3,
+		strokeWeight: 5
 	});
-	shading.setMap(map);	
-
+	shading.setMap(map);		
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

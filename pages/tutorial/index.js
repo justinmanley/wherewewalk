@@ -26,7 +26,10 @@ function initialize() {
 							'<h2>Instructions</h2>'+
 							'<p>Follow the steps of the tutorial.</p>'+
 							'<div class="sidebar-button">'+
-								'<a href="../start"><button id="reset-button" class="dowsing-button dowsing-button-grey">SKIP TUTORIAL</button></a>'+
+								'<a href="."><button id="reset-button" class="dowsing-button dowsing-button-grey">RESET</button></a>'+
+							'</div><!-- .sidebar-button -->'+							
+							'<div class="sidebar-button">'+
+								'<a href="../start"><button id="skip-tutorial-button" class="dowsing-button dowsing-button-grey">SKIP TUTORIAL</button></a>'+
 							'</div><!-- .sidebar-button -->'+							
 						'</div><!-- #instructions-content -->';
 

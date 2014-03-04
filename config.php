@@ -1,6 +1,6 @@
 <?php 
-	$dbhost = 'localhost';
-	$dbname = 'spatialsurvey';
-	$dbuser = 'spatialsurveyusr';
-	$dbpassword = 'J5yMEGym4DbnTfXH';
+	$dbhost = 'HOSTNAME';
+	$dbname = 'DATABASE_NAME';
+	$dbuser = 'DATABASE_USERNAME';
+	$dbpassword = 'DATABASE_PASSWORD';
 ?>
