@@ -1,5 +1,4 @@
 <html class="thankyou">
-<link href='http://fonts.googleapis.com/css?family=Andada' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" type="text/css" href="../../dowsing-js/css/style.css">
 <link rel="stylesheet" type="text/css" href="../../css/style.css">
 <script>
