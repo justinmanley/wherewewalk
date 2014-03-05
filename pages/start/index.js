@@ -112,8 +112,7 @@ function initialize() {
 			content: '<h2>What path did you take around campus yesterday?</h2>'+
 					'<hr />'+
 					'<p>The campus boundary is indicated on the map by a black line.</p>'+
-					'<p>Trace the path you took around campus yesterday starting from where you arrived on campus.  When you\'re done drawing, enter the time you arrived on campus and the time you left campus, formatted as X:XXam.</p>'+
-					'<p>Click on the map to start drawing.</p>'
+					'<p>Trace the path you took around campus yesterday starting from where you arrived on campus.  When you\'re done drawing, enter the time you arrived on campus and the time you left campus.</p>'
 			,
 			buttonText: 'START'
 		}

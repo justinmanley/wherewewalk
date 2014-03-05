@@ -49,7 +49,7 @@ function initialize() {
 				content: '<h2>What time?</h2>'+
 						'<h3>When did you visit the different spots along your path?  How long did you spend there?</h3>'+
 						'<p>Where did you spend more than half an hour yesterday?  You can mark those spots on the map by clicking along your path and entering in the pop-up bubble the time you arrived and the time you left.</p>'+
-						'<p>This will help give us a better idea of the ebb and flow of foot traffic around campus.</p>',
+						'<p>This will help us better understand the ebb and flow of foot traffic around campus.</p>',
 				buttonText: 'GO'
 			}		
 		]
@@ -63,7 +63,7 @@ function initialize() {
 							'</div><!-- #instructions-sidebar -->';
 
 		var helpContent = '<p>'+
-								'Did you make a mistake?  You can go back to the previous screen to edit your path if you need to:'+
+								'You can go back to the previous screen to edit your path if you need to:'+
 							'</p>'+								
 							'<div class="sidebar-button">'+
 								'<a href="../start/"><button id="edit-path" class="dowsing-button">EDIT PATH</button></a>'+
