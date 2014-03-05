@@ -1,6 +1,7 @@
 <html class="thankyou">
 <link rel="stylesheet" type="text/css" href="../../dowsing-js/css/style.css">
 <link rel="stylesheet" type="text/css" href="../../css/style.css">
+<script type="text/javascript" src="../../dowsing-js/resources/prefixfree.min.js"></script>
 <script>
 	setTimeout("location.href = 'http://facilities.uchicago.edu/about/mission/';", 5000)
 </script>
