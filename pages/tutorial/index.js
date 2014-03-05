@@ -45,7 +45,7 @@ function initialize() {
 						'<hr />'+
 						'<p>Campus is always changing, and it is the job of Facilities Services to make sure that it\'s changing for the better.</p>'+
 						'<p>New buildings, pedestrian zones, paths, and lighting are all part of that change.</p>'+
-						'<p>Understanding how you use campus will help us design these campus improvements so that they are beautiful, comfortable, and useful to you.</p>'
+						'<p>Understanding how you use campus will help us design these campus improvements so that they are beautiful, comfortable, and useful.</p>'
 			,
 			buttonText: 'NEXT'
 		},
