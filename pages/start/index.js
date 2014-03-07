@@ -31,6 +31,8 @@ function initialize() {
 		drawingManager.setOptions({ drawingMode: null });
 		mapHelper.rightClickButton(polyline);
 
+		console.log('lalkj');
+
 		surveyHelper.instructions.create(drawingManager, { 
 			content: instructionsPrimary,
 			action: function() { 
@@ -43,8 +45,9 @@ function initialize() {
 				document.getElementById('sidebar-end-time').value = data.getEndTime();
 
 				surveyHelper.showNextButton(data, 'add_time', 'start', function() {	
+					data.setHasResponse(true);
 					var startTime = document.getElementById('sidebar-start-time').value;
-					var endTime = document.getElementById('sidebar-end-time').value;			
+					var endTime = document.getElementById('sidebar-end-time').value;	
 					data.setPolylineCoordinates(polyline.getPath().getArray());
 					if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
 						data.setStartTime(startTime);
@@ -63,11 +66,13 @@ function initialize() {
 			drawingManager.setOptions({
 				drawingMode: null
 			});		
-			mapHelper.rightClickButton(polyline);			
+			mapHelper.rightClickButton(polyline);	
 
 			surveyHelper.showNextButton(data, 'add_time', 'start', function() {
+				data.setHasResponse(true);	
 				var startTime = document.getElementById('sidebar-start-time').value;
 				var endTime = document.getElementById('sidebar-end-time').value;	
+				data.setPolylineCoordinates(polyline.getPath().getArray());	
 				if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
 					data.setStartTime(startTime);
 					data.setEndTime(endTime);
@@ -126,7 +131,7 @@ function initialize() {
  			timeErrorMessage.style.display = 'none'; 
 
 			surveyHelper.showNextButton(data, 'end', 'start', function() {	
-				data.setEmptyResponse();
+				data.setHasResponse(false);
 				return true;
 			});
 
