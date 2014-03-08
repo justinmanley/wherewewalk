@@ -17,7 +17,7 @@ function initialize() {
 	// all user data is stored in this object
 	var surveyHelper = spatialsurvey(map, document);
 	var mapHelper = mapcalc(map, document);
-	var data = surveyHelper.pathData();
+	var data = surveyHelper.pathData.create();
 	data.load(function() {}, onLoadPathData);
 
 	function onLoadPathData() {

@@ -20,7 +20,7 @@ function initialize() {
 	var surveyHelper = spatialsurvey(map, document, drawingManager);
 	var mapHelper = mapcalc(map, document);
 
-	var data = surveyHelper.pathData();
+	var data = surveyHelper.pathData.create();
 	data.load(onFirstTimeAndReset, onPathLoad);
 
 	function onPathLoad() {
@@ -62,7 +62,6 @@ function initialize() {
 
 	function onFirstTimeAndReset() {
 		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
-			data.setPolylineCoordinates(polyline.getPath().getArray());
 			drawingManager.setOptions({
 				drawingMode: null
 			});		
