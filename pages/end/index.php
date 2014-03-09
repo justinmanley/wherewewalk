@@ -1,10 +1,13 @@
 <html class="thankyou">
-<link href='http://fonts.googleapis.com/css?family=Andada' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="../../dowsing-js/css/style.css">
-<link rel="stylesheet" type="text/css" href="../../css/style.css">
-<script>
-	setTimeout("location.href = 'http://facilities.uchicago.edu/about/mission/';", 5000)
-</script>
+	<head>
+		<meta charset="UTF-8"/>
+		<link href='http://fonts.googleapis.com/css?family=Andada' rel='stylesheet' type='text/css'/>
+		<link rel="stylesheet" type="text/css" href="../../dowsing-js/css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+		<script>
+			setTimeout("location.href = 'http://facilities.uchicago.edu/about/mission/';", 5000)
+		</script>
+	</head>
 <?php 
 
 function successful_database_save() {
