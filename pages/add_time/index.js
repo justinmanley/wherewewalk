@@ -88,8 +88,9 @@ function initialize() {
 			content: instructionsPrimary,
 			action: function() {
 				surveyHelper.showNextButton(data, 'end', 'add_time', function() {
+					data.setHasResponse(true);
 					return true;
-				}, function() { });
+				});
 				sidebar.show();
 				sidebar.toggleHelp();
 			},
