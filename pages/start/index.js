@@ -31,8 +31,6 @@ function initialize() {
 		drawingManager.setOptions({ drawingMode: null });
 		mapHelper.rightClickButton(polyline);
 
-		console.log('lalkj');
-
 		surveyHelper.instructions.create(drawingManager, { 
 			content: instructionsPrimary,
 			action: function() { 
