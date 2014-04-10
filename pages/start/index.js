@@ -20,7 +20,7 @@ function initialize() {
 	var surveyHelper = spatialsurvey(map, document, drawingManager);
 	var mapHelper = mapcalc(map, document);
 
-	var data = surveyHelper.pathData.create();
+	var data = new surveyHelper.PathData();
 	data.load(onFirstTimeAndReset, onPathLoad);
 
 	function onPathLoad() {
