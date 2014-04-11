@@ -88,10 +88,19 @@ function initialize() {
 		surveyHelper.instructions.create(drawingManager, { 
 			content: instructionsPrimary,
 			action: function() {
-				surveyHelper.showNextButton(data, 'end', 'add_time', function() {
-					data.setHasResponse(true);
-					return true;
-				});
+				new surveyHelper.Button({
+					id: 'next-button',
+					text:'NEXT',
+					onClick: function() {
+						data.setHasResponse(true);
+						data.send({
+							destinationPageName: 'end',
+							currentPageName: 'add_time',
+							validates: function() { return true; },
+							validationError: function() { }
+						});
+					}
+				}).show();
 				sidebar.show();
 				sidebar.toggleHelp();
 			},

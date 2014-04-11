@@ -23,6 +23,71 @@ function initialize() {
 	var data = new surveyHelper.PathData();
 	data.load(onFirstTimeAndReset, onPathLoad);
 
+	function onFirstTimeAndReset() {
+		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
+			drawingManager.setOptions({
+				drawingMode: null
+			});		
+			mapHelper.rightClickButton(polyline);	
+
+			new surveyHelper.Button({ 
+				text: 'NEXT', 
+				id: 'next-button',
+				onClick: function() {
+					data.setPolylineCoordinates(polyline.getPath().getArray());	
+					data.setStartTime(document.getElementById('sidebar-start-time').value);
+					data.setEndTime(document.getElementById('sidebar-end-time').value);
+					data.setHasResponse(true);	
+					data.send({
+						destinationPageName: 'add_time',
+						currentPageName: 'start', 
+						validates: function() { 			
+							if ( surveyHelper.isValidTime(data.getStartTime()) && surveyHelper.isValidTime(data.getEndTime()))
+								return true;
+							else { 
+								sidebar.refresh(function() {
+									var errorMessage = document.getElementById('time-input-error');
+									errorMessage.innerHTML = 'Please enter your start and end time.';
+									errorMessage.style.display = 'block';
+								});
+								return false; 
+							} 
+						},
+						validationError: function() {
+							var startTimeForm = document.getElementById('sidebar-start-time');
+							var endTimeForm = document.getElementById('sidebar-end-time');
+
+							var oldColor = startTimeForm.style.backgroundColor;
+
+							startTimeForm.style.backgroundColor = '#ff4e4e';
+							endTimeForm.style.backgroundColor = '#ff4e4e';
+
+							setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
+							setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
+						}
+					});					
+				} 
+			}).show();	
+		});
+
+		surveyHelper.instructions.create(drawingManager, { 
+			content: instructionsPrimary,
+			action: function() { 
+				sidebar.show(); 
+				sidebar.toggleHelp();
+
+				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'focus', onFocusInputField);
+				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'blur', onBlurInputField);				
+				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'focus', onFocusInputField);
+				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'blur', onBlurInputField);				
+
+				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
+			},
+			hideAction: function() { sidebar.hide(); }
+		});
+	}
+
+
 	function onPathLoad() {
 		var polyline = data.getPolyline();
 		polyline.setOptions({ editable: true });
@@ -42,66 +107,43 @@ function initialize() {
 				document.getElementById('sidebar-start-time').value = data.getStartTime();
 				document.getElementById('sidebar-end-time').value = data.getEndTime();
 
-				surveyHelper.showNextButton(data, 'add_time', 'start', function() {	
-					data.setHasResponse(true);
-					var startTime = document.getElementById('sidebar-start-time').value;
-					var endTime = document.getElementById('sidebar-end-time').value;	
-					data.setPolylineCoordinates(polyline.getPath().getArray());
-					if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
-						data.setStartTime(startTime);
-						data.setEndTime(endTime);
-					}	
-					return true;
-				});				
+				new surveyHelper.Button({
+					id: 'next-button', 
+					text: 'NEXT',
+					onClick: function() {
+						data.send({
+							destinationPageName: 'add_time',
+							currentPageName: 'start', 
+							validates: function() { 					
+								data.setHasResponse(true);
+								var startTime = document.getElementById('sidebar-start-time').value;
+								var endTime = document.getElementById('sidebar-end-time').value;	
+								data.setPolylineCoordinates(polyline.getPath().getArray());
+								if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
+									data.setStartTime(startTime);
+									data.setEndTime(endTime);
+								}	
+								return true; 
+							},
+							validationError: function() {
+								var startTimeForm = doc.getElementById('sidebar-start-time');
+								var endTimeForm = doc.getElementById('sidebar-end-time');
+
+								var oldColor = startTimeForm.style.backgroundColor;
+
+								startTimeForm.style.backgroundColor = '#ff4e4e';
+								endTimeForm.style.backgroundColor = '#ff4e4e';
+
+								setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
+								setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
+							}
+						});
+					}
+				}).show();		
 			},
 			hideAction: function() { sidebar.hide(); }
 		});
-	}
-
-	function onFirstTimeAndReset() {
-		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
-			drawingManager.setOptions({
-				drawingMode: null
-			});		
-			mapHelper.rightClickButton(polyline);	
-
-			surveyHelper.showNextButton(data, 'add_time', 'start', function() {
-				data.setHasResponse(true);	
-				var startTime = document.getElementById('sidebar-start-time').value;
-				var endTime = document.getElementById('sidebar-end-time').value;	
-				data.setPolylineCoordinates(polyline.getPath().getArray());	
-				if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
-					data.setStartTime(startTime);
-					data.setEndTime(endTime);
-					return true;
-				}
-				else { 
-					sidebar.refresh(function() {
-						var errorMessage = document.getElementById('time-input-error');
-						errorMessage.innerHTML = 'Please enter your start and end time.';
-						errorMessage.style.display = 'block';
-					});
-					return false; 
-				}
-			});
-		});
-
-		surveyHelper.instructions.create(drawingManager, { 
-			content: instructionsPrimary,
-			action: function() { 
-				sidebar.show(); 
-				sidebar.toggleHelp();
-
-				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'focus', onFocusInputField);
-				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'blur', onBlurInputField);				
-				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'focus', onFocusInputField);
-				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'blur', onBlurInputField);				
-
-				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
-			},
-			hideAction: function() { sidebar.hide(); }
-		});
-	}	
+	}		
 
 	surveyHelper.showProgress(2,4, 'Draw your path.');
 
@@ -127,10 +169,19 @@ function initialize() {
  			var timeErrorMessage = document.getElementById('time-input-error');
  			timeErrorMessage.style.display = 'none'; 
 
-			surveyHelper.showNextButton(data, 'end', 'start', function() {	
-				data.setHasResponse(false);
-				return true;
-			});
+			new surveyHelper.Button({
+				id: 'next-button', 
+				text: 'NEXT',
+				onClick: function() {
+					data.setHasResponse(false);
+					data.send({
+						destinationPageName: 'end',
+						currentPageName: 'start',
+						validates: function() { return true; },
+						validationError: function() { }
+					});
+				}
+			}).show();
 
 			sidebar.refresh(function() {
 				// hide the input boxes and labels for start and end times
