@@ -17,8 +17,6 @@ function initialize() {
 			strokeWeight: 4
 		}
 	});
-	var surveyHelper = spatialsurvey(map, document, drawingManager);
-	var mapHelper = mapcalc(map, document);
 
 	var data = new surveyHelper.PathData();
 	data.load(onFirstTimeAndReset, onPathLoad);

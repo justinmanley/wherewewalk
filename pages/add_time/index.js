@@ -25,21 +25,19 @@ function initialize() {
 		var polyline = data.getPolyline();
 		polyline.setMap(map);
 
-		surveyHelper.timestamp({
+		new surveyHelper.Timestamp({
 			polyline: polyline,
 			position: polyline.getPath().getAt(0),
 			startTime: data.getStartTime(),
-			type: 'single',
-			openOnCreate: false
-		}).create();
+			type: 'single'
+		}).show('open');
 
-		surveyHelper.timestamp({
+		new surveyHelper.Timestamp({
 			polyline: polyline,
 			position: polyline.getPath().getArray().last(),
 			startTime: data.getEndTime(),
-			type: 'single',
-			openOnCreate: false
-		}).create();					
+			type: 'single'
+		}).show('open');					
 
 		setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)) }, 1000);
 
