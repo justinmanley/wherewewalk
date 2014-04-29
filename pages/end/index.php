@@ -2,7 +2,7 @@
 <head>
 	<meta charset="UTF-8"/>
 	<link href='http://fonts.googleapis.com/css?family=Andada' rel='stylesheet' type='text/css'/>
-	<link rel="stylesheet" type="text/css" href="../../dowsing-js/css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="../../spatialsurvey/css/style.css"/>
 	<link rel="stylesheet" type="text/css" href="../../css/style.css"/>
 	<script>
 		setTimeout("location.href = 'http://facilities.uchicago.edu/about/mission/';", 5000)
@@ -16,11 +16,11 @@ function successful_database_save() {
 	return;
 }
 
-require_once('../../dowsing-js/save.php'); 
+require_once('../../spatialsurvey/save.php'); 
 
 ?>
 <div id="github-link">
-	Think this survey is cool?   Check out the code on <a href="https://github.com/manleyjster/dowsing-js">Github</a>
+	Think this survey is cool?   Check out the code on <a href="https://github.com/manleyjster/spatialsurvey">Github</a>
 </div>
 </body>
 </html><!-- .thankyou -->

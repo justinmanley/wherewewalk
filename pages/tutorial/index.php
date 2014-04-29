@@ -2,5 +2,5 @@
 	$_SESSION['path-data'] = '{}';
 
 	$page_name = 'start';
-	require_once('../../dowsing-js/index_template.php');
+	require_once('../../spatialsurvey/index_template.php');
 ?>

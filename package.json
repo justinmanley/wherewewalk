@@ -1,7 +1,7 @@
 {
 	"name":"wherewewalk",
 	"version":"0.1.0",
-	"repository": "https://github.com/manleyjster/dowsing-js",
+	"repository": "https://github.com/manleyjster/wherewewalk",
 	"devDependencies": {
 		"grunt": "~0.4.2",
 		"grunt-contrib-jshint": "~0.6.3",
@@ -12,6 +12,7 @@
 	    "grunt-contrib-less": "~0.11.0",
 		"grunt-contrib-clean": "~0.5.0",	    	    
 	    "matchdep": "~0.3.0",
-	    "qunitjs":"1.14.0"		
+	    "qunitjs":"1.14.0",
+	    "qunit-theme-ninja": "~1.1.0"		
 	}
 }

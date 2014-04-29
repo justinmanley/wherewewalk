@@ -247,7 +247,7 @@ function initialize() {
 
 	var helpContent = '<p>You can click reset to clear your path and start over, or go back to the tutorial.</p>'+
 							'<div class="sidebar-button">'+
-								'<a href="../../dowsing-js/reset.php"><button id="reset-button" class="dowsing-button">RESET</button></a>'+
+								'<a href="../../spatialsurvey/reset.php"><button id="reset-button" class="dowsing-button">RESET</button></a>'+
 							'</div><!-- .sidebar-button -->'+
 							'<div class="sidebar-button">'+
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
