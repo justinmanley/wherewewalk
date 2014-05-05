@@ -19,8 +19,12 @@ function initialize() {
 			strokeWeight: 4
 		}
 	});
-	var surveyHelper = spatialsurvey(map, document, drawingManager);
-	var mapHelper = mapcalc(map, document);
+
+	spatialsurvey.init({
+		map: map,
+		drawingManager: drawingManager
+	});	
+	mapHelper.init({ map: map });
 
 	var sidebarContent = '<div id="instructions-content">'+
 							'<h2>Instructions</h2>'+
@@ -33,13 +37,13 @@ function initialize() {
 							'</div><!-- .sidebar-button -->'+							
 						'</div><!-- #instructions-content -->';
 
-	var sidebar = surveyHelper.sidebar.create({ 
+	var sidebar = spatialsurvey.sidebar.create({ 
 		content: sidebarContent, 
 		height: 395,
 		sidebarId: 'instructions-sidebar'
 	});
 
-	surveyHelper.instructions.create(drawingManager, {
+	spatialsurvey.instructions.create(drawingManager, {
 		content: [{
 			content:  '<h2>Where Do You Walk?</h2>'+
 						'<hr />'+
@@ -59,13 +63,13 @@ function initialize() {
 			buttonText: 'NEXT'
 		}],
 		action: function() { 
-			surveyHelper.tutorial.create(drawingManager, surveyHelper.tutorial.standardCurriculum); 
+			spatialsurvey.tutorial.create(drawingManager, spatialsurvey.tutorial.standardCurriculum); 
 			sidebar.show();
 		},
 		hideAction: function() { sidebar.hide(); }
 	});
 
-	surveyHelper.showProgress(1, 4, 'Tutorial');
+	spatialsurvey.showProgress(1, 4, 'Tutorial');
 
 
 }

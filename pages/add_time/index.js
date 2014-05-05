@@ -13,26 +13,28 @@ function initialize() {
 	var drawingManager = new google.maps.drawing.DrawingManager({
 		drawingControl: false
 	});	
-
-	// all user data is stored in this object
-	var surveyHelper = spatialsurvey(map, document);
-	var mapHelper = mapcalc(map, document);
 	
-	var data = new surveyHelper.PathData();
-	data.load(function() {}, onLoadPathData);
+	spatialsurvey.init({
+		map: map, 
+		drawingManager: drawingManager
+	});
+	mapHelper.init({ map: map });	
+
+	var data = new spatialsurvey.PathData();
+	data.load();
 
 	function onLoadPathData() {
 		var polyline = data.getPolyline();
 		polyline.setMap(map);
 
-		new surveyHelper.Timestamp({
+		new spatialsurvey.Timestamp({
 			polyline: polyline,
 			position: polyline.getPath().getAt(0),
 			startTime: data.getStartTime(),
 			type: 'single'
 		}).show('open');
 
-		new surveyHelper.Timestamp({
+		new spatialsurvey.Timestamp({
 			polyline: polyline,
 			position: polyline.getPath().getArray().last(),
 			startTime: data.getEndTime(),
@@ -41,7 +43,7 @@ function initialize() {
 
 		setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)) }, 1000);
 
-		surveyHelper.showProgress(3,4, 'Add times.');
+		spatialsurvey.showProgress(3,4, 'Add times.');
 
 		instructionsPrimary = [
 			{ 
@@ -71,7 +73,7 @@ function initialize() {
 							'<div class="sidebar-button">'+
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
 							'</div><!-- .sidebar-button -->'
-		var sidebar = surveyHelper.sidebar.create({
+		var sidebar = spatialsurvey.sidebar.create({
 			height: 100, 
 			content: instructionsSidebar, 
 			sidebarId: 'instructions-sidebar',
@@ -83,10 +85,10 @@ function initialize() {
 			}
 		});
 
-		surveyHelper.instructions.create(drawingManager, { 
+		spatialsurvey.instructions.create(drawingManager, { 
 			content: instructionsPrimary,
 			action: function() {
-				new surveyHelper.Button({
+				new spatialsurvey.Button({
 					id: 'next-button',
 					text:'NEXT',
 					onClick: function() {
@@ -110,7 +112,7 @@ function initialize() {
 			var tolerance = 0.05*Math.pow(1.1, -map.getZoom());
 			if (google.maps.geometry.poly.isLocationOnEdge(event.latLng, userPolyline, tolerance)) {
 				var position = mapHelper.closestPointOnPolyline(userPolyline, event.latLng);
-				surveyHelper.timestamp({
+				spatialsurvey.timestamp({
 					polyline: userPolyline, 
 					position: position,
 					type: 'double'
@@ -118,6 +120,8 @@ function initialize() {
 			}			
 		});		
 	}
+
+	onLoadPathData();
 
 }
 

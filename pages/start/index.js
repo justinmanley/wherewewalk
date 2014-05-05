@@ -18,8 +18,14 @@ function initialize() {
 		}
 	});
 
-	var data = new surveyHelper.PathData();
-	data.load(onFirstTimeAndReset, onPathLoad);
+	spatialsurvey.init({
+		map: map, 
+		drawingManager: drawingManager
+	});
+	mapHelper.init({ map: map });
+
+	var data = new spatialsurvey.PathData();
+	data.load();
 
 	function onFirstTimeAndReset() {
 		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
@@ -28,7 +34,7 @@ function initialize() {
 			});		
 			mapHelper.rightClickButton(polyline);	
 
-			new surveyHelper.Button({ 
+			new spatialsurvey.Button({ 
 				text: 'NEXT', 
 				id: 'next-button',
 				onClick: function() {
@@ -40,15 +46,14 @@ function initialize() {
 						destinationPageName: 'add_time',
 						currentPageName: 'start', 
 						validates: function() { 			
-							if ( surveyHelper.isValidTime(data.getStartTime()) && surveyHelper.isValidTime(data.getEndTime()))
-								return true;
+							if ( spatialsurvey.isValidTime(data.getStartTime()) && spatialsurvey.isValidTime(data.getEndTime()))
+								spatialsurvey.advance({ destinationPageName: 'add_time' });
 							else { 
 								sidebar.refresh(function() {
 									var errorMessage = document.getElementById('time-input-error');
 									errorMessage.innerHTML = 'Please enter your start and end time.';
 									errorMessage.style.display = 'block';
 								});
-								return false; 
 							} 
 						},
 						validationError: function() {
@@ -68,7 +73,7 @@ function initialize() {
 			}).show();	
 		});
 
-		surveyHelper.instructions.create(drawingManager, { 
+		spatialsurvey.instructions.create(drawingManager, { 
 			content: instructionsPrimary,
 			action: function() { 
 				sidebar.show(); 
@@ -94,7 +99,7 @@ function initialize() {
 		drawingManager.setOptions({ drawingMode: null });
 		mapHelper.rightClickButton(polyline);
 
-		surveyHelper.instructions.create(drawingManager, { 
+		spatialsurvey.instructions.create(drawingManager, { 
 			content: instructionsPrimary,
 			action: function() { 
 				sidebar.show(); 
@@ -105,7 +110,7 @@ function initialize() {
 				document.getElementById('sidebar-start-time').value = data.getStartTime();
 				document.getElementById('sidebar-end-time').value = data.getEndTime();
 
-				new surveyHelper.Button({
+				new spatialsurvey.Button({
 					id: 'next-button', 
 					text: 'NEXT',
 					onClick: function() {
@@ -117,7 +122,7 @@ function initialize() {
 								var startTime = document.getElementById('sidebar-start-time').value;
 								var endTime = document.getElementById('sidebar-end-time').value;	
 								data.setPolylineCoordinates(polyline.getPath().getArray());
-								if ( surveyHelper.isValidTime(startTime) && surveyHelper.isValidTime(endTime)) {
+								if ( spatialsurvey.isValidTime(startTime) && spatialsurvey.isValidTime(endTime)) {
 									data.setStartTime(startTime);
 									data.setEndTime(endTime);
 								}	
@@ -143,7 +148,7 @@ function initialize() {
 		});
 	}		
 
-	surveyHelper.showProgress(2,4, 'Draw your path.');
+	spatialsurvey.showProgress(2,4, 'Draw your path.');
 
 	function onFocusInputField(event) {
 		event.target.value = '';
@@ -167,7 +172,7 @@ function initialize() {
  			var timeErrorMessage = document.getElementById('time-input-error');
  			timeErrorMessage.style.display = 'none'; 
 
-			new surveyHelper.Button({
+			new spatialsurvey.Button({
 				id: 'next-button', 
 				text: 'NEXT',
 				onClick: function() {
@@ -201,7 +206,7 @@ function initialize() {
 			});
 
 			drawingManager.setOptions({ drawingMode: google.maps.drawing.OverlayType.POLYLINE });
-			var nextButton = document.getElementById('next-page-button');
+			var nextButton = document.getElementById('next-button');
 			var nextButtonParent = nextButton.parentNode;
 			var oldButton = nextButtonParent.removeChild(nextButton);
 		}
@@ -253,7 +258,7 @@ function initialize() {
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
 							'</div><!-- .sidebar-button -->';
 
-	var sidebar = surveyHelper.sidebar.create({ 
+	var sidebar = spatialsurvey.sidebar.create({ 
 		content: instructionsSidebar, 
 		height: 395,
 		sidebarId: 'instructions-sidebar',
@@ -263,7 +268,7 @@ function initialize() {
 			content: helpContent,
 			contentId: 'help-content'
 		}
-	});	 	
+	});	
 
 	var shading = new google.maps.Polygon({
 		paths: [ illinois, campus ],
@@ -271,6 +276,11 @@ function initialize() {
 		strokeWeight: 5
 	});
 	shading.setMap(map);		
+
+	if ( data.toString() == '{}' )
+		onFirstTimeAndReset();
+	else
+		onPathLoad();	
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
