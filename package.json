@@ -15,6 +15,11 @@
 	    "qunitjs":"1.14.0",
 	    "qunit-theme-ninja": "~1.1.0",
 	    "nightwatch": "~0.4.14"
-
+	},
+	"dependencies": {
+		"terraformer": "~1.0.3",
+		"terraformer-geostore": "~1.0.3",
+		"terraformer-rtree": "~1.0.0",
+		"terraformer-geostore-memory": "*"
 	}
 }

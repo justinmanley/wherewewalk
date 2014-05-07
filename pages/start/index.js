@@ -3,8 +3,8 @@ function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: mapCenter,
 		zoom: 19,
-		maxZoom: 20,
-		minZoom: 18,
+		// maxZoom: 20,
+		// minZoom: 18,
 		zoomControl: { style: 'SMALL' },
 		mapTypeId: google.maps.MapTypeId.HYBRID
 	});
@@ -24,10 +24,35 @@ function initialize() {
 	});
 	mapHelper.init({ map: map });
 
-	var data = new spatialsurvey.PathData();
-	data.load();
+	// var store = new Terraformer.GeoStore({
+	// 	store: new Terraformer.GeoStore.Memory(),
+	// 	index: new Terraformer.RTree()
+	// });
 
-	function onFirstTimeAndReset() {
+	var sidewalks;
+	var request = new XMLHttpRequest();
+	request.open('GET', '../../sidewalks.geojson', false);
+	request.onreadystatechange = function() {
+		if (request.readyState == 4) {
+			if (request.status == 200) { 
+				sidewalks = JSON.parse(request.responseText);
+			}
+		}
+	};
+	request.send();
+
+	map.data.loadGeoJson('../../sidewalks.geojson');
+	map.data.setStyle({
+		strokeWeight: 3,
+		strokeColor: '#ffffff',
+		visible: true
+	});
+
+	var data = new spatialsurvey.PathData();
+	data.load();	
+
+	function onFirstTimeAndReset() 
+	{
 		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
 			drawingManager.setOptions({
 				drawingMode: null
@@ -85,6 +110,36 @@ function initialize() {
 				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'blur', onBlurInputField);				
 
 				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
+
+				document.addEventListener('clicknodrag', function(event) {
+					sidewalkDistance = [];
+					sidewalks.features.forEach(function(segment) {
+						var coordinates = segment.geometry.coordinates;
+						var line = new google.maps.Polyline({
+							path: [
+								new google.maps.LatLng(coordinates[0][1], coordinates[0][0]),
+								new google.maps.LatLng(coordinates[1][1], coordinates[1][0])
+							]
+						});	
+						// console.log(event);
+						var point = mapHelper.pixelsToLatLng(event);
+						var closestPoint = mapHelper.closestPointOnPolyline(line, point);
+						var obj = {
+							'id': segment.id,
+							'coordinates': { lat: closestPoint.lat(), lng: closestPoint.lng() },
+							'distance': google.maps.geometry.spherical.computeDistanceBetween(point, closestPoint)
+						};
+						sidewalkDistance.push(obj);
+						// why is it that if I set closestPoint: closestPoint, it just gives 0?
+					});
+					var closest = sidewalkDistance.sort(function(a,b) {
+						return a.distance - b.distance;
+					})[0].coordinates;
+					new google.maps.Marker({
+						position: new google.maps.LatLng(closest.lat, closest.lng),
+						map: map
+					});
+				});	
 			},
 			hideAction: function() { sidebar.hide(); }
 		});
@@ -108,7 +163,7 @@ function initialize() {
 				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
 
 				document.getElementById('sidebar-start-time').value = data.getStartTime();
-				document.getElementById('sidebar-end-time').value = data.getEndTime();
+				document.getElementById('sidebar-end-time').value = data.getEndTime();			
 
 				new spatialsurvey.Button({
 					id: 'next-button', 
