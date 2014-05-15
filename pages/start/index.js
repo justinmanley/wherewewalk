@@ -22,7 +22,10 @@ function initialize() {
 		map: map, 
 		drawingManager: drawingManager
 	});
-	mapHelper.init({ map: map });
+	mapHelper.init({ 
+		map: map,
+		drawingManager: drawingManager
+	});
 
 	map.data.loadGeoJson('../../sidewalks.geojson');
 	map.data.setStyle({
@@ -32,167 +35,48 @@ function initialize() {
 	});
 
 	var data = new spatialsurvey.PathData();
-	data.load();	
 
-	function onFirstTimeAndReset() 
-	{
-		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) { 
-			drawingManager.setOptions({
-				drawingMode: null
-			});		
-			mapHelper.rightClickButton(polyline);	
+	function onPolylineComplete(polyline) {
+		new spatialsurvey.Button({ 
+			text: 'NEXT', 
+			id: 'next-button',
+			onClick: function() {
+				sessionStorage.setItem('path-reset', false);
+				data.setPolylineCoordinates(polyline.getPath().getArray());	
+				data.setStartTime(document.getElementById('sidebar-start-time').value);
+				data.setEndTime(document.getElementById('sidebar-end-time').value);
+				data.setHasResponse(true);	
+				data.send({
+					destinationPageName: 'add_time',
+					currentPageName: 'start', 
+					validates: function() { 			
+						if ( spatialsurvey.isValidTime(data.getStartTime()) && spatialsurvey.isValidTime(data.getEndTime()))
+							return true;
+						else { 
+							return false;
+						} 
+					},
+					validationError: function() {
+						sidebar.refresh(function() {
+							var errorMessage = document.getElementById('time-input-error');
+							errorMessage.innerHTML = 'Please enter your start and end time.';
+							errorMessage.style.display = 'block';
+						});							
+						var startTimeForm = document.getElementById('sidebar-start-time');
+						var endTimeForm = document.getElementById('sidebar-end-time');
 
-			new spatialsurvey.Button({ 
-				text: 'NEXT', 
-				id: 'next-button',
-				onClick: function() {
-					data.setPolylineCoordinates(polyline.getPath().getArray());	
-					data.setStartTime(document.getElementById('sidebar-start-time').value);
-					data.setEndTime(document.getElementById('sidebar-end-time').value);
-					data.setHasResponse(true);	
-					data.send({
-						destinationPageName: 'add_time',
-						currentPageName: 'start', 
-						validates: function() { 			
-							if ( spatialsurvey.isValidTime(data.getStartTime()) && spatialsurvey.isValidTime(data.getEndTime()))
-								spatialsurvey.advance({ destinationPageName: 'add_time' });
-							else { 
-								sidebar.refresh(function() {
-									var errorMessage = document.getElementById('time-input-error');
-									errorMessage.innerHTML = 'Please enter your start and end time.';
-									errorMessage.style.display = 'block';
-								});
-							} 
-						},
-						validationError: function() {
-							var startTimeForm = document.getElementById('sidebar-start-time');
-							var endTimeForm = document.getElementById('sidebar-end-time');
+						var oldColor = startTimeForm.style.backgroundColor;
 
-							var oldColor = startTimeForm.style.backgroundColor;
+						startTimeForm.style.backgroundColor = '#ff4e4e';
+						endTimeForm.style.backgroundColor = '#ff4e4e';
 
-							startTimeForm.style.backgroundColor = '#ff4e4e';
-							endTimeForm.style.backgroundColor = '#ff4e4e';
-
-							setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
-							setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
-						}
-					});					
-				} 
-			}).show();	
-		});
-
-		spatialsurvey.instructions.create(drawingManager, { 
-			content: instructionsPrimary,
-			action: function() { 
-				sidebar.show(); 
-				sidebar.toggleHelp();
-
-				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'focus', onFocusInputField);
-				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'blur', onBlurInputField);				
-				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'focus', onFocusInputField);
-				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'blur', onBlurInputField);				
-
-				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
-
-				document.addEventListener('mousemove', closestPointMarker);	
-				closestPointMarker()
-			},
-			hideAction: function() { sidebar.hide(); }
-		});
-	}
-
-	function closestPointMarker(event) {
-		document.addListener('mousedown', function() {
-			document.removeListener('mousemove', closestPointMarker);
-			document.addListener('mouseup', function() {
-				document.addListener('mousemove', closestPointMarker);
-			});
-		});
-		sidewalkDistance = [];
-		sidewalks.features.forEach(function(segment) {
-			var coordinates = segment.geometry.coordinates;
-			var line = new google.maps.Polyline({
-				path: [
-					new google.maps.LatLng(coordinates[0][1], coordinates[0][0]),
-					new google.maps.LatLng(coordinates[1][1], coordinates[1][0])
-				]
-			});	
-			// console.log(event);
-			var point = mapHelper.pixelsToLatLng(event.clientX, event.clientY);
-			var closestPoint = mapHelper.closestPointOnPolyline(line, point);
-			var obj = {
-				'id': segment.id,
-				'coordinates': { lat: closestPoint.lat(), lng: closestPoint.lng() },
-				'distance': google.maps.geometry.spherical.computeDistanceBetween(point, closestPoint)
-			};
-			sidewalkDistance.push(obj);
-			// why is it that if I set closestPoint: closestPoint, it just gives 0?
-		});
-		var closest = sidewalkDistance.sort(function(a,b) {
-			return a.distance - b.distance;
-		})[0].coordinates;
-		new google.maps.Marker({
-			position: new google.maps.LatLng(closest.lat, closest.lng),
-			map: map
-		});
-	}
-
-	function onPathLoad() {
-		var polyline = data.getPolyline();
-		polyline.setOptions({ editable: true });
-		polyline.setMap(map);
-
-		drawingManager.setOptions({ drawingMode: null });
-		mapHelper.rightClickButton(polyline);
-
-		spatialsurvey.instructions.create(drawingManager, { 
-			content: instructionsPrimary,
-			action: function() { 
-				sidebar.show(); 
-				sidebar.toggleHelp();
-
-				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
-
-				document.getElementById('sidebar-start-time').value = data.getStartTime();
-				document.getElementById('sidebar-end-time').value = data.getEndTime();			
-
-				new spatialsurvey.Button({
-					id: 'next-button', 
-					text: 'NEXT',
-					onClick: function() {
-						data.send({
-							destinationPageName: 'add_time',
-							currentPageName: 'start', 
-							validates: function() { 					
-								data.setHasResponse(true);
-								var startTime = document.getElementById('sidebar-start-time').value;
-								var endTime = document.getElementById('sidebar-end-time').value;	
-								data.setPolylineCoordinates(polyline.getPath().getArray());
-								if ( spatialsurvey.isValidTime(startTime) && spatialsurvey.isValidTime(endTime)) {
-									data.setStartTime(startTime);
-									data.setEndTime(endTime);
-								}	
-								return true; 
-							},
-							validationError: function() {
-								var startTimeForm = doc.getElementById('sidebar-start-time');
-								var endTimeForm = doc.getElementById('sidebar-end-time');
-
-								var oldColor = startTimeForm.style.backgroundColor;
-
-								startTimeForm.style.backgroundColor = '#ff4e4e';
-								endTimeForm.style.backgroundColor = '#ff4e4e';
-
-								setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
-								setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
-							}
-						});
+						setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
+						setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
 					}
-				}).show();		
-			},
-			hideAction: function() { sidebar.hide(); }
-		});
-	}		
+				});					
+			} 
+		}).show();	
+	}
 
 	spatialsurvey.showProgress(2,4, 'Draw your path.');
 
@@ -258,6 +142,8 @@ function initialize() {
 		}
  	}
 
+
+
 	var instructionsPrimary = [
 		{ 
 			content: '<h2>What path did you take around campus yesterday?</h2>'+
@@ -298,7 +184,7 @@ function initialize() {
 
 	var helpContent = '<p>You can click reset to clear your path and start over, or go back to the tutorial.</p>'+
 							'<div class="sidebar-button">'+
-								'<a href="../../spatialsurvey/reset.php"><button id="reset-button" class="dowsing-button">RESET</button></a>'+
+								'<button id="reset-button" class="dowsing-button"">RESET</button>'+
 							'</div><!-- .sidebar-button -->'+
 							'<div class="sidebar-button">'+
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
@@ -323,10 +209,67 @@ function initialize() {
 	});
 	shading.setMap(map);		
 
-	if ( data.toString() == '{}' )
-		onFirstTimeAndReset();
-	else
-		onPathLoad();	
+	if ( sessionStorage.getItem('path-reset') == "true" ) {
+		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) {
+			drawingManager.setOptions({
+				drawingMode: null
+			});	
+			onPolylineComplete(polyline);
+		});
+		spatialsurvey.instructions.create(drawingManager, { 
+			content: instructionsPrimary,
+			action: function() { 
+				sidebar.show();
+
+				google.maps.event.addDomListener(document.getElementById('reset-button'), 'click', function() {
+					sessionStorage.setItem('path-reset', true);
+					window.location.assign('./');		
+				});
+
+				sidebar.toggleHelp();
+
+				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'focus', onFocusInputField);
+				google.maps.event.addDomListener(document.getElementById('sidebar-start-time'), 'blur', onBlurInputField);				
+				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'focus', onFocusInputField);
+				google.maps.event.addDomListener(document.getElementById('sidebar-end-time'), 'blur', onBlurInputField);				
+
+				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
+			},
+			hideAction: function() { sidebar.hide(); }
+		});					
+	}
+	else {
+		data.load();
+
+		var polyline = data.getPolyline();
+		polyline.setOptions({ editable: true });
+		polyline.setMap(map);
+
+		drawingManager.setOptions({ drawingMode: null });
+		mapHelper.rightClickButton(polyline);
+
+		spatialsurvey.instructions.create(drawingManager, { 
+			content: instructionsPrimary,
+			action: function() { 
+				sidebar.show(); 
+				sidebar.toggleHelp();
+
+				google.maps.event.addDomListener(document.getElementById('reset-button'), 'click', function() {
+					sessionStorage.setItem('path-reset', true);
+					window.location.assign('./');		
+				});
+
+				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
+
+				document.getElementById('sidebar-start-time').value = data.getStartTime();
+				document.getElementById('sidebar-end-time').value = data.getEndTime();			
+
+				onPolylineComplete(polyline);
+			},
+			hideAction: function() { sidebar.hide(); }
+		});		
+	}
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

@@ -24,7 +24,10 @@ function initialize() {
 		map: map,
 		drawingManager: drawingManager
 	});	
-	mapHelper.init({ map: map });
+	mapHelper.init({ 
+		map: map,
+		drawingManager: drawingManager
+	});
 
 	var sidebarContent = '<div id="instructions-content">'+
 							'<h2>Instructions</h2>'+
@@ -70,8 +73,10 @@ function initialize() {
 	});
 
 	spatialsurvey.showProgress(1, 4, 'Tutorial');
-
-
+	
+	if ( sessionStorage.getItem('path-data') === null ) {
+		sessionStorage.setItem('path-reset', true);
+	}
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

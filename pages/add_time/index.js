@@ -18,7 +18,10 @@ function initialize() {
 		map: map, 
 		drawingManager: drawingManager
 	});
-	mapHelper.init({ map: map });	
+	mapHelper.init({ 
+		map: map,
+		drawingManager: drawingManager
+	});	
 
 	var data = new spatialsurvey.PathData();
 	data.load();
@@ -120,7 +123,6 @@ function initialize() {
 			}			
 		});		
 	}
-
 	onLoadPathData();
 
 }
