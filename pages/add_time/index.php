@@ -1,4 +1,4 @@
 <?php 
 	$page = 'add_time'; 
-	require_once('../../spatialsurvey/index_template.php'); 
+	require_once('../../spatialsurvey/templates/map_template.php'); 
 ?>
