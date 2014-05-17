@@ -52,8 +52,7 @@ function initialize() {
 						'<hr />'+
 						'<p>Campus is always changing, and it is the job of Facilities Services to make sure that it\'s changing for the better.</p>'+
 						'<p>New buildings, pedestrian zones, paths, and lighting are all part of that change.</p>'+
-						'<p>Understanding how you use campus will help us design these campus improvements so that they are beautiful, comfortable, and useful.</p>'
-			,
+						'<p>Understanding how you use campus will help us design these campus improvements so that they are beautiful, comfortable, and useful.</p>',
 			buttonText: 'NEXT'
 		},
 		{
@@ -61,8 +60,7 @@ function initialize() {
 						'<hr />'+
 						'<p>This survey will ask you to describe the path that you took around campus yesterday by tracing it on the map.</p>'+
 						'<hr />'+
-						'<p>First we\'ll lead you through a quick tutorial of the survey tool, then we\'ll ask you to draw the path you took yesterday.  There are three screens in all, and the survey takes about eight minutes to complete.</p>'
-			,
+						'<p>First we\'ll lead you through a quick tutorial of the survey tool, then we\'ll ask you to draw the path you took yesterday.  There are three screens in all, and the survey takes about eight minutes to complete.</p>',
 			buttonText: 'NEXT'
 		}],
 		action: function() { 
@@ -73,7 +71,7 @@ function initialize() {
 	});
 
 	spatialsurvey.showProgress(1, 4, 'Tutorial');
-	
+
 	if ( sessionStorage.getItem('path-data') === null ) {
 		sessionStorage.setItem('path-reset', true);
 	}

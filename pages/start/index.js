@@ -49,7 +49,7 @@ function initialize() {
 				data.send({
 					destinationPageName: 'add_time',
 					currentPageName: 'start', 
-					validates: function() { 			
+					validates: function() {
 						if ( spatialsurvey.isValidTime(data.getStartTime()) && spatialsurvey.isValidTime(data.getEndTime()))
 							return true;
 						else { 
@@ -93,14 +93,14 @@ function initialize() {
 				event.target.value = 'X:XXpm';
 			event.target.style.color = '#696969';
 		}
- 	}
+	}
 
- 	function toggleOnCampus(event) {
- 		// the user just said they were NOT on campus yesterday
- 		if( event.target.checked ) {
- 			map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();	
- 			var timeErrorMessage = document.getElementById('time-input-error');
- 			timeErrorMessage.style.display = 'none'; 
+	function toggleOnCampus(event) {
+		// the user just said they were NOT on campus yesterday
+		if( event.target.checked ) {
+			map.controls[google.maps.ControlPosition.BOTTOM_CENTER].clear();
+			var timeErrorMessage = document.getElementById('time-input-error');
+			timeErrorMessage.style.display = 'none';
 
 			new spatialsurvey.Button({
 				id: 'next-button', 
@@ -124,8 +124,8 @@ function initialize() {
 				timesArray.map(function(x) { x.style.display = 'none'; });	
 			});
 			drawingManager.setOptions({ drawingMode: null });
- 		}
- 		// set back to drawing mode b/c the user WAS on campus yesterday
+		}
+		// set back to drawing mode b/c the user WAS on campus yesterday
 		else {
 			sidebar.refresh(function(){
 				// show the input boxes and labels for start and end times
@@ -140,7 +140,7 @@ function initialize() {
 			var nextButtonParent = nextButton.parentNode;
 			var oldButton = nextButtonParent.removeChild(nextButton);
 		}
- 	}
+	}
 
 
 
@@ -149,8 +149,7 @@ function initialize() {
 			content: '<h2>What path did you take around campus yesterday?</h2>'+
 					'<hr />'+
 					'<p>The campus boundary is indicated on the map by a black line.</p>'+
-					'<p>Trace the path you took around campus yesterday starting from where you arrived on campus.  When you\'re done drawing, enter the time you arrived on campus and the time you left campus.</p>'
-			,
+					'<p>Trace the path you took around campus yesterday starting from where you arrived on campus.  When you\'re done drawing, enter the time you arrived on campus and the time you left campus.</p>',
 			buttonText: 'START'
 		}
 	];

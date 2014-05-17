@@ -1,7 +1,7 @@
 if(!Array.prototype.last) {
     Array.prototype.last = function() {
         return this[this.length - 1];
-    }
+    };
 }
 
 function initialize() {
@@ -44,19 +44,19 @@ function initialize() {
 			type: 'single'
 		}).show('open');					
 
-		setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)) }, 1000);
+		setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)); }, 1000);
 
 		spatialsurvey.showProgress(3,4, 'Add times.');
 
 		instructionsPrimary = [
-			{ 
+			{
 				content: '<h2>What time?</h2>'+
 						'<h3>When did you visit the different spots along your path?  How long did you spend there?</h3>'+
 						'<p>Where did you spend more than half an hour yesterday?  You can mark those spots on the map by clicking along your path and entering in the pop-up bubble the time you arrived and the time you left.</p>'+
 						'<p>This will help us better understand the ebb and flow of foot traffic around campus.</p>',
 				buttonText: 'GO'
 			}		
-		]
+		];
 
 		instructionsSidebar = '<div id="instructions-content">'+
 								'<h2>Instructions</h2>'+
@@ -75,7 +75,7 @@ function initialize() {
 							'<p>You can also go back to the tutorial for a refresher.</p>'+
 							'<div class="sidebar-button">'+
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
-							'</div><!-- .sidebar-button -->'
+							'</div><!-- .sidebar-button -->';
 		var sidebar = spatialsurvey.sidebar.create({
 			height: 100, 
 			content: instructionsSidebar, 

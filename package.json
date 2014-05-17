@@ -7,14 +7,14 @@
 		"grunt-contrib-jshint": "~0.6.3",
 		"grunt-contrib-nodeunit": "~0.2.0",
 		"grunt-contrib-uglify": "~0.2.2",
-	    "grunt-contrib-qunit": ">=0.2.1",
-	    "grunt-contrib-watch": ">=0.3.1",
-	    "grunt-contrib-less": "~0.11.0",
-		"grunt-contrib-clean": "~0.5.0",	    	    
-	    "matchdep": "~0.3.0",
-	    "qunitjs":"1.14.0",
-	    "qunit-theme-ninja": "~1.1.0",
-	    "nightwatch": "~0.4.14"
+		"grunt-contrib-qunit": ">=0.2.1",
+		"grunt-contrib-watch": ">=0.3.1",
+		"grunt-contrib-less": "~0.11.0",
+		"grunt-contrib-clean": "~0.5.0",
+		"matchdep": "~0.3.0",
+		"qunitjs":"1.14.0",
+		"qunit-theme-ninja": "~1.1.0",
+		"nightwatch": "~0.4.14"
 	},
 	"dependencies": {
 		"terraformer": "~1.0.3",
