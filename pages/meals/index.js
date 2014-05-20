@@ -28,6 +28,8 @@ function initialize() {
 		drawingManager: drawingManager
 	});
 
+	spatialsurvey.showProgress(4,5, 'Where did you eat on campus?');
+
 	var surveyResponse = new spatialsurvey.SurveyResponse();
 	var polyline = surveyResponse.getValue('path');
 

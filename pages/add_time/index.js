@@ -45,7 +45,7 @@ function initialize() {
 
 	setTimeout(function() { map.panTo(surveyResponse.getValue('path').getPath().getAt(0)); }, 1000);
 
-	spatialsurvey.showProgress(3,4, 'Add times.');
+	spatialsurvey.showProgress(3,5, 'Add times.');
 
 	instructionsPrimary = [
 		{
