@@ -3,4 +3,5 @@
 	$dbname = 'DB_NAME';
 	$dbuser = 'USER_NAME';
 	$dbpassword = 'DB_PASSWORD';
+	$appname = 'wherewewalk';
 ?>
