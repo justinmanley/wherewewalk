@@ -20,7 +20,7 @@ require_once('../../spatialsurvey/save.php');
 
 ?>
 <div id="github-link">
-	Think this survey is cool?   Check out the code on <a href="https://github.com/manleyjster/spatialsurvey">Github</a>
+	Think this survey is cool?   Check out the <a href="../../spatialsurvey/docs/spatialsurvey/0.1.0">documentation</a> and the code on <a href="https://github.com/manleyjster/spatialsurvey">Github</a>
 </div>
 </body>
 </html><!-- .thankyou -->
