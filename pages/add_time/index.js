@@ -96,7 +96,7 @@ function initialize() {
 				onClick: function() {
 					data.setHasResponse(true);
 					data.send({
-						destinationPageName: 'end',
+						destinationPageName: 'meals',
 						currentPageName: 'add_time',
 						validates: function() { return true; },
 						validationError: function() { }

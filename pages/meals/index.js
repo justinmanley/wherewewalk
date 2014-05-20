@@ -89,6 +89,20 @@ function initialize() {
 			for (var i = 0; i < meals.length; i++) {
 				dragAndDropMeal(meals[i]);				
 			}
+
+			new spatialsurvey.Button({
+				id: 'next-button', 
+				text:'NEXT', 
+				onClick: function() {
+					data.setHasResponse(true);
+					data.send({
+						destinationPageName: 'end', 
+						currentPageName: 'meals', 
+						validates: function() { return true; },
+						validationError: function() { }
+					});
+				}
+			}).show();
 		},
 		hideAction: function() {}
 	}).show();
