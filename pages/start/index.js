@@ -215,9 +215,11 @@ function initialize() {
 			});	
 			onPolylineComplete(polyline);
 		});
-		spatialsurvey.instructions.create(drawingManager, { 
+		new spatialsurvey.Instructions({ 
 			content: instructionsPrimary,
-			action: function() { 
+			action: function() {
+				drawingManager.setMap(map);
+
 				sidebar.show();
 
 				google.maps.event.addDomListener(document.getElementById('reset-button'), 'click', function() {
@@ -235,7 +237,7 @@ function initialize() {
 				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
 			},
 			hideAction: function() { sidebar.hide(); }
-		});					
+		}).show();
 	}
 	else {
 		data.load();
@@ -247,9 +249,11 @@ function initialize() {
 		drawingManager.setOptions({ drawingMode: null });
 		mapHelper.rightClickButton(polyline);
 
-		spatialsurvey.instructions.create(drawingManager, { 
+		new spatialsurvey.Instructions({ 
 			content: instructionsPrimary,
-			action: function() { 
+			action: function() {
+				drawingManager.setMap(map);
+
 				sidebar.show(); 
 				sidebar.toggleHelp();
 
@@ -266,7 +270,7 @@ function initialize() {
 				onPolylineComplete(polyline);
 			},
 			hideAction: function() { sidebar.hide(); }
-		});		
+		}).show();		
 	}
 
 }

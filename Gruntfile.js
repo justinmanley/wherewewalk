@@ -9,15 +9,19 @@ module.exports = function(grunt) {
 		},
 		less: {
 			development: {
-				options: {
-					rootpath: 'css',
-					files: { 'style.css': 'style.less' }
-				}
+				files: { 'css/style.css': 'css/style.less' }
 			}
-		},			
+		},
+		watch: {
+			less: {
+				files: ['css/*.less'],
+				tasks: [ 'less' ]
+			}
+		},	
 		qunit: {
 			files: [ 'tests/*.html' ]
 		}		
 	});
 	grunt.registerTask('default', ['jshint', 'qunit', 'less']);	
+	grunt.registerTask('start-watching', 'watch');
 };

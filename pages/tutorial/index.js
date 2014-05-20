@@ -46,7 +46,7 @@ function initialize() {
 		sidebarId: 'instructions-sidebar'
 	});
 
-	spatialsurvey.instructions.create(drawingManager, {
+	var instructions = new spatialsurvey.Instructions({
 		content: [{
 			content:  '<h2>Where Do You Walk?</h2>'+
 						'<hr />'+
@@ -64,11 +64,12 @@ function initialize() {
 			buttonText: 'NEXT'
 		}],
 		action: function() { 
+			drawingManager.setMap(map);
 			spatialsurvey.tutorial.create(drawingManager, spatialsurvey.tutorial.standardCurriculum); 
 			sidebar.show();
 		},
 		hideAction: function() { sidebar.hide(); }
-	});
+	}).show();
 
 	spatialsurvey.showProgress(1, 4, 'Tutorial');
 
