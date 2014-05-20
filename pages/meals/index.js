@@ -113,7 +113,6 @@ function initialize() {
 				text:'NEXT', 
 				onClick: function() {
 					surveyResponse.setValue('meals', mealData);
-					surveyResponse.submit();
 					spatialsurvey.advance({ destinationPageName: 'end' });
 				}
 			}).show();
