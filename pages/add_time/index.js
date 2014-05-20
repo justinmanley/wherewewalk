@@ -90,6 +90,18 @@ function initialize() {
 	var instructions = new spatialsurvey.Instructions({ 
 		content: instructionsPrimary,
 		action: function() {
+			var panel = document.createElement('panel');
+			panel.style.width = '20%';
+			panel.style.height = '100%';
+			panel.style.backgroundColor = '#e8e8e8';
+			panel.style.float = 'left';
+			panel.innerHTML = '<h3>Places</h3>';
+			panel.style.boxShadow = 'inset 3px 3px 1px #e8e8e8';
+
+			document.getElementById('map-canvas').style.width = '80%';
+			document.getElementById('map-canvas').style.float = 'right';
+			document.getElementById('map-canvas').parentNode.insertBefore(panel, document.getElementById('map-canvas'));
+
 			new spatialsurvey.Button({
 				id: 'next-button',
 				text:'NEXT',
