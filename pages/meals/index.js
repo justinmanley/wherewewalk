@@ -20,16 +20,16 @@ function initialize() {
 
 	spatialsurvey.init({
 		map: map, 
-		drawingManager: drawingManager
+		drawingManager: drawingManager,
+		appName: 'wherewewalk'
 	});
 	mapHelper.init({ 
 		map: map,
 		drawingManager: drawingManager
 	});
 
-	var data = new spatialsurvey.PathData();
-	data.load();
-	var polyline = data.getPolyline();
+	var surveyResponse = new spatialsurvey.SurveyResponse();
+	var polyline = surveyResponse.getValue('path');
 
 	var meals = ['breakfast', 'coffee', 'dinner', 'lunch' ];
 	var sidebarContent = '<h2>Instructions</h2>'+
@@ -48,11 +48,14 @@ function initialize() {
 		sidebarId: 'instructions-sidebar'
 	});
 
+	var mealData = {};
+
 	var instructions = new spatialsurvey.Instructions({
 		content: [{
 			content: '<h2>Where did you eat on campus today?</h2>'+
 					'<hr />'+
-					'<p>We know that campus eateries are important gathering places.  Help us understand ___: tell us where you had breakfast, lunch, and dinner, where you stopped to grab a coffee, or where you had a snack.</p>',
+					'<p>We know that campus eateries are important gathering places.  Help us understand how you use them by telling us where you ate, where you grabbed coffee, or where you stopped for a snack yesterday.</p>'+
+					'<p>Drag and drop icons on to the path you took yesterday.</p>',
 			buttonText: 'OK'
 		}],
 		action: function() {
@@ -71,14 +74,27 @@ function initialize() {
 								scaledSize: new google.maps.Size(40,60)
 							},
 							map: map,
-							draggable: true
+							draggable: true,
+							title: meal
 						});
+						mealData[meal] = {
+							"type": "Feature", 
+							"geometry": mapHelper.toGeoJSON(marker.getPosition()),
+							"properties": { "meal": meal }
+						};						
 						google.maps.event.addListener(marker, 'rightclick', function() {
 							marker.setMap(null);
 						});
 						google.maps.event.addListener(marker, 'drag', function() {
 							var dragPosition = mapHelper.closestPointOnPolyline(polyline, marker.getPosition());
 							marker.setPosition(dragPosition);
+						});
+						google.maps.event.addListener(marker, 'dragend', function() {
+							mealData[meal] = {
+								"type": "Feature", 
+								"geometry": mapHelper.toGeoJSON(marker.getPosition()),
+								"properties": { "meal": meal }
+							};
 						});
 						google.maps.event.removeListener(onDragover);
 						google.maps.event.removeListener(onDrop);
@@ -94,18 +110,12 @@ function initialize() {
 				id: 'next-button', 
 				text:'NEXT', 
 				onClick: function() {
-					data.setHasResponse(true);
-					data.send({
-						destinationPageName: 'end', 
-						currentPageName: 'meals', 
-						validates: function() { return true; },
-						validationError: function() { }
-					});
+					surveyResponse.setValue('meals', mealData);
+					spatialsurvey.advance({ destinationPageName: 'end' });
 				}
 			}).show();
 		},
 		hideAction: function() {}
 	}).show();
-
 }
 google.maps.event.addDomListener(window, 'load', initialize);

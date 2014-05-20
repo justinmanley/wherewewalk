@@ -17,10 +17,13 @@ function initialize() {
 			strokeWeight: 4
 		}
 	});
+	var appName = 'wherewewalk';
 
 	spatialsurvey.init({
 		map: map, 
-		drawingManager: drawingManager
+		drawingManager: drawingManager,
+		appName: appName
+
 	});
 	mapHelper.init({ 
 		map: map,
@@ -34,47 +37,43 @@ function initialize() {
 		visible: true
 	});
 
-	var data = new spatialsurvey.PathData();
+	var surveyResponse = new spatialsurvey.SurveyResponse();
 
 	function onPolylineComplete(polyline) {
 		new spatialsurvey.Button({ 
 			text: 'NEXT', 
 			id: 'next-button',
 			onClick: function() {
-				sessionStorage.setItem('path-reset', false);
-				data.setPolylineCoordinates(polyline.getPath().getArray());	
-				data.setStartTime(document.getElementById('sidebar-start-time').value);
-				data.setEndTime(document.getElementById('sidebar-end-time').value);
-				data.setHasResponse(true);	
-				data.send({
-					destinationPageName: 'add_time',
-					currentPageName: 'start', 
-					validates: function() {
-						if ( spatialsurvey.isValidTime(data.getStartTime()) && spatialsurvey.isValidTime(data.getEndTime()))
-							return true;
-						else { 
-							return false;
-						} 
-					},
-					validationError: function() {
-						sidebar.refresh(function() {
-							var errorMessage = document.getElementById('time-input-error');
-							errorMessage.innerHTML = 'Please enter your start and end time.';
-							errorMessage.style.display = 'block';
-						});							
-						var startTimeForm = document.getElementById('sidebar-start-time');
-						var endTimeForm = document.getElementById('sidebar-end-time');
+				surveyResponse.setValue('path', polyline);	
+				var startTime = document.getElementById('sidebar-start-time').value;
+				var endTime = document.getElementById('sidebar-end-time').value;
 
-						var oldColor = startTimeForm.style.backgroundColor;
+				/* Validate the responses before they are added to the SurveyResponse object. */
+				if ( spatialsurvey.isValidTime(startTime) && spatialsurvey.isValidTime(endTime)) {
+					surveyResponse.setValue('startTime', startTime);
+					surveyResponse.setValue('endTime', endTime);
+					spatialsurvey.advance({ destinationPageName: 'add_time'	});
+				}
 
-						startTimeForm.style.backgroundColor = '#ff4e4e';
-						endTimeForm.style.backgroundColor = '#ff4e4e';
+				/* Handle any validation errors. */
+				else {
+					sidebar.refresh(function() {
+						var errorMessage = document.getElementById('time-input-error');
+						errorMessage.innerHTML = 'Please enter your start and end time.';
+						errorMessage.style.display = 'block';
+					});							
+					var startTimeForm = document.getElementById('sidebar-start-time');
+					var endTimeForm = document.getElementById('sidebar-end-time');
 
-						setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
-						setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
-					}
-				});					
-			} 
+					var oldColor = startTimeForm.style.backgroundColor;
+
+					startTimeForm.style.backgroundColor = '#ff4e4e';
+					endTimeForm.style.backgroundColor = '#ff4e4e';
+
+					setTimeout(function() { startTimeForm.style.backgroundColor = oldColor; }, 1500);
+					setTimeout(function() { endTimeForm.style.backgroundColor = oldColor; }, 1500);
+				}				
+			}
 		}).show();	
 	}
 
@@ -106,13 +105,7 @@ function initialize() {
 				id: 'next-button', 
 				text: 'NEXT',
 				onClick: function() {
-					data.setHasResponse(false);
-					data.send({
-						destinationPageName: 'end',
-						currentPageName: 'start',
-						validates: function() { return true; },
-						validationError: function() { }
-					});
+					spatialsurvey.advance({ destinationPageName: 'end' });
 				}
 			}).show();
 
@@ -208,7 +201,7 @@ function initialize() {
 	});
 	shading.setMap(map);		
 
-	if ( sessionStorage.getItem('path-reset') == "true" ) {
+	if ( surveyResponse.isEmpty() ) {
 		google.maps.event.addListener(drawingManager, 'polylinecomplete', function(polyline) {
 			drawingManager.setOptions({
 				drawingMode: null
@@ -223,8 +216,8 @@ function initialize() {
 				sidebar.show();
 
 				google.maps.event.addDomListener(document.getElementById('reset-button'), 'click', function() {
-					sessionStorage.setItem('path-reset', true);
-					window.location.assign('./');		
+					surveyResponse.reset();
+					location.reload();
 				});
 
 				sidebar.toggleHelp();
@@ -240,9 +233,7 @@ function initialize() {
 		}).show();
 	}
 	else {
-		data.load();
-
-		var polyline = data.getPolyline();
+		var polyline = surveyResponse.getValue('path');
 		polyline.setOptions({ editable: true });
 		polyline.setMap(map);
 
@@ -258,14 +249,14 @@ function initialize() {
 				sidebar.toggleHelp();
 
 				google.maps.event.addDomListener(document.getElementById('reset-button'), 'click', function() {
-					sessionStorage.setItem('path-reset', true);
-					window.location.assign('./');		
+					surveyResponse.reset();
+					location.reload();
 				});
 
 				google.maps.event.addDomListener(document.getElementById('sidebar-on-campus'), 'change', toggleOnCampus);
 
-				document.getElementById('sidebar-start-time').value = data.getStartTime();
-				document.getElementById('sidebar-end-time').value = data.getEndTime();			
+				document.getElementById('sidebar-start-time').value = surveyResponse.getValue('startTime');
+				document.getElementById('sidebar-end-time').value = surveyResponse.getValue('endTime');			
 
 				onPolylineComplete(polyline);
 			},

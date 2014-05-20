@@ -72,10 +72,6 @@ function initialize() {
 	}).show();
 
 	spatialsurvey.showProgress(1, 4, 'Tutorial');
-
-	if ( sessionStorage.getItem('path-data') === null ) {
-		sessionStorage.setItem('path-reset', true);
-	}
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);

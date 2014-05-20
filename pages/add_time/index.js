@@ -16,34 +16,34 @@ function initialize() {
 	
 	spatialsurvey.init({
 		map: map, 
-		drawingManager: drawingManager
+		drawingManager: drawingManager,
+		appName: 'wherewewalk'
 	});
 	mapHelper.init({ 
 		map: map,
 		drawingManager: drawingManager
 	});	
 
-	var data = new spatialsurvey.PathData();
-	data.load();
+	var surveyResponse = new spatialsurvey.SurveyResponse();
 
-	var polyline = data.getPolyline();
+	var polyline = surveyResponse.getValue('path');
 	polyline.setMap(map);
 
 	new spatialsurvey.Timestamp({
 		polyline: polyline,
 		position: polyline.getPath().getAt(0),
-		startTime: data.getStartTime(),
+		startTime: surveyResponse.getValue('startTime'),
 		type: 'single'
 	}).show('open');
 
 	new spatialsurvey.Timestamp({
 		polyline: polyline,
 		position: polyline.getPath().getArray().last(),
-		startTime: data.getEndTime(),
+		startTime: surveyResponse.getValue('endTime'),
 		type: 'single'
 	}).show('open');					
 
-	setTimeout(function() { map.panTo(data.getPolyline().getPath().getAt(0)); }, 1000);
+	setTimeout(function() { map.panTo(surveyResponse.getValue('path').getPath().getAt(0)); }, 1000);
 
 	spatialsurvey.showProgress(3,4, 'Add times.');
 
@@ -94,34 +94,42 @@ function initialize() {
 				id: 'next-button',
 				text:'NEXT',
 				onClick: function() {
-					data.setHasResponse(true);
-					data.send({
-						destinationPageName: 'meals',
-						currentPageName: 'add_time',
-						validates: function() { return true; },
-						validationError: function() { }
-					});
+					surveyResponse.setValue('timestamps', getTimestamps());
+					spatialsurvey.advance({ destinationPageName: 'meals' });
 				}
 			}).show();
 			sidebar.show();
 			sidebar.toggleHelp();
 		},
 		hideAction: function() { sidebar.hide(); }
-	});
-	instructions.show();		
+	}).show();
 
 	google.maps.event.addListener(map, 'click', function(event) {			
-		var userPolyline = data.getPolyline();
+		var userPolyline = surveyResponse.getValue('path');
 		var tolerance = 0.05*Math.pow(1.1, -map.getZoom());
 		if (google.maps.geometry.poly.isLocationOnEdge(event.latLng, userPolyline, tolerance)) {
 			var position = mapHelper.closestPointOnPolyline(userPolyline, event.latLng);
-			spatialsurvey.timestamp({
+			new spatialsurvey.Timestamp({
 				polyline: userPolyline, 
 				position: position,
 				type: 'double'
-			}).create();
+			}).show('open');
 		}			
 	});
+
+	function getTimestamps() {
+		var timestampWindows = document.getElementsByClassName('timestamp-form');
+		var timestamps = [];
+		for(var i = 0; i < timestampWindows.length; i++) {
+			var startTime = timestampWindows[i].querySelector('input[name=start-time]').value;
+			var endTime = timestampWindows[i].querySelector('input[name=end-time]').value;
+			var lat = timestampWindows[i].getElementsByClassName('timestamp-position-lat')[0].value;
+			var lng = timestampWindows[i].getElementsByClassName('timestamp-position-lng')[0].value;
+
+			timestamps.push({ 'startTime': startTime, 'endTime': endTime, 'position': { 'lat': lat, 'lng': lng }});
+		}
+		return timestamps;
+	}		
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
