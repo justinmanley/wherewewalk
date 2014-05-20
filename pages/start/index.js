@@ -77,7 +77,7 @@ function initialize() {
 		}).show();	
 	}
 
-	spatialsurvey.showProgress(2,4, 'Draw your path.');
+	spatialsurvey.showProgress(2,5, 'Draw your path.');
 
 	function onFocusInputField(event) {
 		event.target.value = '';

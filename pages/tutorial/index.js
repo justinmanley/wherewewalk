@@ -71,7 +71,7 @@ function initialize() {
 		hideAction: function() { sidebar.hide(); }
 	}).show();
 
-	spatialsurvey.showProgress(1, 4, 'Tutorial');
+	spatialsurvey.showProgress(1, 5, 'Tutorial');
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
