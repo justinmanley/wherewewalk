@@ -77,7 +77,7 @@ function initialize() {
 		}).show();	
 	}
 
-	spatialsurvey.showProgress(2,5, 'Draw your path.');
+	new spatialsurvey.ProgressBar({ currentScreen: 2, max: 5, description: 'Draw your path.'}).show();
 
 	function onFocusInputField(event) {
 		event.target.value = '';
@@ -182,7 +182,7 @@ function initialize() {
 								'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
 							'</div><!-- .sidebar-button -->';
 
-	var sidebar = spatialsurvey.sidebar.create({ 
+	var sidebar = new spatialsurvey.Sidebar({ 
 		content: instructionsSidebar, 
 		height: 395,
 		sidebarId: 'instructions-sidebar',
@@ -193,6 +193,7 @@ function initialize() {
 			contentId: 'help-content'
 		}
 	});	
+	sidebar.show();
 
 	var shading = new google.maps.Polygon({
 		paths: [ illinois, campus ],
@@ -238,7 +239,7 @@ function initialize() {
 		polyline.setMap(map);
 
 		drawingManager.setOptions({ drawingMode: null });
-		mapHelper.rightClickButton(polyline);
+		mapHelper.enableVertexDelete(polyline);
 
 		new spatialsurvey.Instructions({ 
 			content: instructionsPrimary,

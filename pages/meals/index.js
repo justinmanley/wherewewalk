@@ -28,7 +28,7 @@ function initialize() {
 		drawingManager: drawingManager
 	});
 
-	spatialsurvey.showProgress(4,5, 'Where did you eat on campus?');
+	spatialsurvey.ProgressBar({ currentScreen: 4, max: 5, description: 'Where did you eat on campus?'}).show();
 
 	var surveyResponse = new spatialsurvey.SurveyResponse();
 	var polyline = surveyResponse.getValue('path');
@@ -44,11 +44,12 @@ function initialize() {
 	}
 	sidebarContent += '</table>';
 
-	var sidebar = spatialsurvey.sidebar.create({
+	var sidebar = new spatialsurvey.Sidebar({
 		content: sidebarContent,
 		height: 395,
 		sidebarId: 'instructions-sidebar'
 	});
+	sidebar.show();
 
 	var mealData = {};
 

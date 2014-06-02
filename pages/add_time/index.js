@@ -1,9 +1,3 @@
-if(!Array.prototype.last) {
-    Array.prototype.last = function() {
-        return this[this.length - 1];
-    };
-}
-
 function initialize() {
 	var map = new google.maps.Map(document.getElementById("map-canvas"), {
 		center: new google.maps.LatLng(41.790113, -87.600732),
@@ -38,14 +32,14 @@ function initialize() {
 
 	new spatialsurvey.Timestamp({
 		polyline: polyline,
-		position: polyline.getPath().getArray().last(),
+		position: polyline.getPath().getArray()[polyline.getPath().getArray().length - 1],
 		startTime: surveyResponse.getValue('endTime'),
 		type: 'single'
 	}).show('open');					
 
 	setTimeout(function() { map.panTo(surveyResponse.getValue('path').getPath().getAt(0)); }, 1000);
 
-	spatialsurvey.showProgress(3,5, 'Add times.');
+	new spatialsurvey.ProgressBar({ currentScreen: 3, max: 5, description: 'Add times.' });
 
 	instructionsPrimary = [
 		{
@@ -75,7 +69,7 @@ function initialize() {
 						'<div class="sidebar-button">'+
 							'<a href="../tutorial/index.php"><button id="back-to-tutorial-button" class="dowsing-button dowsing-button-grey">BACK TO TUTORIAL</button></a>'+
 						'</div><!-- .sidebar-button -->';
-	var sidebar = spatialsurvey.sidebar.create({
+	var sidebar = new spatialsurvey.Sidebar({
 		height: 100, 
 		content: instructionsSidebar, 
 		sidebarId: 'instructions-sidebar',
@@ -86,6 +80,7 @@ function initialize() {
 			contentId: 'help-content'
 		}
 	});
+	sidebar.show();
 
 	var instructions = new spatialsurvey.Instructions({ 
 		content: instructionsPrimary,

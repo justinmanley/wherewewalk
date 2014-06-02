@@ -40,7 +40,7 @@ function initialize() {
 							'</div><!-- .sidebar-button -->'+							
 						'</div><!-- #instructions-content -->';
 
-	var sidebar = spatialsurvey.sidebar.create({ 
+	var sidebar = new spatialsurvey.Sidebar({ 
 		content: sidebarContent, 
 		height: 395,
 		sidebarId: 'instructions-sidebar'
@@ -65,13 +65,13 @@ function initialize() {
 		}],
 		action: function() { 
 			drawingManager.setMap(map);
-			spatialsurvey.tutorial.create(drawingManager, spatialsurvey.tutorial.standardCurriculum); 
+			new spatialsurvey.Tutorial(spatialsurvey.standardTutorialLessons).start(); 
 			sidebar.show();
 		},
 		hideAction: function() { sidebar.hide(); }
 	}).show();
 
-	spatialsurvey.showProgress(1, 5, 'Tutorial');
+	new spatialsurvey.ProgressBar({ currentScreen: 1, max: 5, description: 'Tutorial' }).show();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
