@@ -1,6 +1,6 @@
-spatialsurvey is a survey application built for the University of Chicago using the dowsing.js survey framework.
+spatialsurvey is a survey application built for the University of Chicago using the [spatialsurvey.js](https://github.com/manleyjster/spatialsurvey) survey framework.
 
-This project is released under the MIT License.  Full documentation coming soon.
+This project is released under the MIT License.  Documentation at [wherewewalk.uchicago.edu/documentation](wherewewalk.uchicago.edu/documentation).
 
 -------------------------
 
